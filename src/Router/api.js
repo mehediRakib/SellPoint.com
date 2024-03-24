@@ -22,6 +22,12 @@ router.get('/ProductByCategory/:categoryID',productController.readProductByCateg
 router.get('/ProductBySubCategory/:subCategoryID',productController.readProductBySubCategory);
 router.post('/sellProduct/:categoryID/:subcategoryID',AuthVerification,productController.sellProduct);
 router.get('/readProductDetails/:productID',productController.readProductDetails);
+router.get('/listByKeyword/:Keyword',productController.listByKeyWord);
+router.get('/listBylocation/:Keyword',productController.listByLocation);
+router.get('/listByLowPrice/:subcategoryID',productController.listByLowPrice);
+router.get('/listByHighPrice/:subcategoryID',productController.listByHighPrice);
+router.get('/sortByTime/:subcategoryID',productController.sortProductByTime);
+router.get('/sortByCondition/:subcategoryID/:condition',productController.sortByCondition);
 
 
 

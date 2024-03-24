@@ -4,13 +4,9 @@ const productModel=require('../Model/products/ProductModel');
 const productDetailsModel=require('../Model/products/ProductDetailsModel');
 const productLocationModel=require('../Model/products/ProductLocationModel');
 const mongoose = require("mongoose");
+const {response} = require("express");
 
 const ObjectID=mongoose.Types.ObjectId
-
-
-
-
-
 
 
 
@@ -89,20 +85,24 @@ const productSellService=async (req)=>{
 
 const ReadProductDetailsService = async (req) => {
     try {
-        const productId =req.params.productID;
+        const productId =new ObjectID(req.params.productID);
         const matchStage={$match:{_id:productId}};
 
-        const joinWithProductDetails={$lookup:{from:"productdetails",localField:"_id",foreignField:"productID",as:"details"}};
-        // let unwindProductDetails = {$unwind: "$productdetails" };
+        const joinWithProductDetails={$lookup:{from:"productdetails",localField:"_id",foreignField:"productID",as:"ProductDetails"}};
+        const joinWithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"ProductLocation"}};
+        let unwindProductDetails = {$unwind: "$ProductDetails" };
+        let unwindProductLocation={$unwind: "$ProductLocation"};
+        let projectionStage={$project:{categoryID:0,subcategoryID:0,'ProductDetails._id':0,'ProductDetails.productID':0,'ProductDetails.createdAt':0,'ProductDetails.updatedAt':0,'ProductLocation._id':0,'ProductLocation.productID':0}};
+
 
         const data = await productModel.aggregate([
             matchStage,
             joinWithProductDetails,
-            // unwindProductDetails
+            unwindProductDetails,
+            joinWithProductLocation,
+            unwindProductLocation,
+            projectionStage
         ]);
-        console.log(data)
-        // const data=await productModel.find({_id:productId})
-
         return { status: "success", data: data };
     } catch (e) {
         return { status: "fail", data: e.toString() };
@@ -110,7 +110,184 @@ const ReadProductDetailsService = async (req) => {
 }
 
 
+const listByKeywordService = async (req) => {
+    try {
+        let searchRegex = { "$regex": req.params.Keyword, "$options": "i" };
+        let searchParam = [
+            { productName: searchRegex },
+            { brandName: searchRegex },
+            { 'profileDetails.model': searchRegex }
+        ];
+        let searchQuery = { $or: searchParam };
+        let matchStage = { $match: searchQuery };
+        const jointWithproductdetails = { $lookup: { from: "productdetails", localField: "_id", foreignField: "productID", as: "ProductDetails" } };
+        let unwindProductDetails = { $unwind: "$ProductDetails" };
 
+        let projectionStage = {
+            $project: {
+                categoryID: 0,
+                subcategoryID: 0,
+                'ProductDetails._id': 0,
+                // 'ProductDetails.productID': 0,
+                'ProductDetails.img1': 0,
+                'ProductDetails.features': 0,
+                'ProductDetails.shortDes': 0,
+                'ProductDetails.createdAt': 0,
+                'ProductDetails.updatedAt': 0,
+            }
+        };
+
+        const data = await productModel.aggregate([
+            matchStage,
+            jointWithproductdetails,
+            unwindProductDetails,
+            projectionStage
+        ]);
+        return { status: "success", data: data };
+    }
+    catch (e) {
+        return { status: "fail", data: e.toString() };
+    }
+}
+
+const listByLocationService = async (req) => {
+    try {
+        let searchRegex = { "$regex": req.params.Keyword, "$options": "i" };
+        let searchParam = [
+            { division: searchRegex },
+            { district: searchRegex },
+            {area: searchRegex }
+        ];
+
+        let searchQuery = { $or: searchParam };
+        let matchStage = { $match: searchQuery };
+        const joinWithProducts = { $lookup: { from: "products", localField: "productID", foreignField: "_id", as: "Products" } };
+        let unwindProduct = { $unwind: "$Products" };
+
+        let projectionStage = {
+            $project: {
+                'Products._id': 0,
+                'Products.productImg': 0,
+                'Products.createdAt': 0,
+                'Products.updatedAt': 0
+            }
+        };
+
+        const data = await productLocationModel.aggregate([
+            matchStage,
+            joinWithProducts,
+            unwindProduct,
+            projectionStage
+        ]);
+
+        return { status: "success", data: data };
+    } catch (e) {
+        return { status: "fail", data: e.toString() };
+    }
+}
+
+const productListByLowPrice=async (req)=>{
+   try{
+       const subcategoryID=new ObjectID(req.params.subcategoryID);
+       const matchStage = { $match: { subcategoryID: subcategoryID } };
+       const sortStage={$sort:{price:1}};
+       let projectionStage={$project:{categoryID:0,subcategoryID:0}};
+
+       const data=await productModel.aggregate([
+               matchStage,
+               sortStage,
+           projectionStage
+       ])
+
+       return {status:"success",data:data};
+   } catch (e) {
+       return {status:'fail',data:e.toString()};
+   }
+}
+
+const productListByHighPrice=async (req)=>{
+    try{
+        const subcategoryID=new ObjectID(req.params.subcategoryID);
+        const matchStage = { $match: { subcategoryID: subcategoryID } };
+        const sortStage={$sort:{price:-1}};
+        let projectionStage={$project:{categoryID:0,subcategoryID:0}};
+
+        const data=await productModel.aggregate([
+            matchStage,
+            sortStage,
+            projectionStage
+        ])
+
+        return {status:"success",data:data};
+    } catch (e) {
+        return {status:'fail',data:e.toString()};
+    }
+}
+
+
+
+const sortProductByTimeService=async (req)=>{
+    try{
+        const subcategoryID=new ObjectID(req.params.subcategoryID);
+        const matchStage = { $match: { subcategoryID: subcategoryID } };
+        const sortStage={$sort:{createdAt:1}};
+        let projectionStage={$project:{categoryID:0,subcategoryID:0}};
+
+        const data=await productModel.aggregate([
+            matchStage,
+            sortStage,
+            projectionStage
+        ])
+
+        return {status:"success",data:data};
+    }catch (e) {
+        return {status:"fail",data:"Something went wrong"};
+    }
+}
+
+
+const filterProductByConditionService = async (req) => {
+    try {
+        const subcategoryID = new ObjectID(req.params.subcategoryID);
+        const condition = req.params.condition;
+
+        const result = await productModel.aggregate([
+            {
+                $match: {
+                    subcategoryID: subcategoryID
+                }
+            },
+            {
+                $lookup: {
+                    from: "productdetails",
+                    localField: "_id",
+                    foreignField: "productID",
+                    as: "productDetails"
+                }
+            },
+            {
+                $addFields: {
+                    matchedProductDetails: {
+                        $filter: {
+                            input: "$productDetails",
+                            as: "productDetail",
+                            cond: { $eq: ["$$productDetail.condition", condition] }
+                        }
+                    }
+                }
+            },
+            {
+                $match: {
+                    matchedProductDetails: { $ne: [] } // Filter out documents with empty matchedProductDetails array
+                }
+            }
+        ]);
+
+        return { status: "success", data: result };
+    } catch (e) {
+        return { status: "fail", data: "Something went wrong" };
+    }
+}
 
 
 module.exports={
@@ -119,5 +296,11 @@ module.exports={
     productByCategoryService,
     productBySubCategoryService,
     productSellService,
-    ReadProductDetailsService
+    ReadProductDetailsService,
+    listByKeywordService,
+    listByLocationService,
+    productListByLowPrice,
+    productListByHighPrice,
+    sortProductByTimeService,
+    filterProductByConditionService
 }

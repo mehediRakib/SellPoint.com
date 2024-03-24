@@ -22,6 +22,6 @@ const DataSchema=mongoose.Schema({
         timestamps:true,versionKey:false
     })
 
-const ProductDetailsModel=mongoose.model('Productdetails',DataSchema)
+const ProductDetailsModel=mongoose.model('ProductDetails',DataSchema)
 
 module.exports=ProductDetailsModel;
