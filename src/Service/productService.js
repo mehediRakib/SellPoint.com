@@ -4,8 +4,6 @@ const productModel=require('../Model/products/ProductModel');
 const productDetailsModel=require('../Model/products/ProductDetailsModel');
 const productLocationModel=require('../Model/products/ProductLocationModel');
 const mongoose = require("mongoose");
-const {response} = require("express");
-
 const ObjectID=mongoose.Types.ObjectId
 
 
