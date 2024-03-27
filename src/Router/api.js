@@ -4,6 +4,8 @@ const router=express.Router();
 const userController=require('../Controller/userController');
 const productController=require('../Controller/productController');
 const AuthVerification=require('../Middleware/AuthVerification');
+const isAdmin=require('../Middleware/adminAuthVerification');
+const adminController=require('../Controller/adminController');
 
 //user API
 router.post('/userOTP',userController.otpRequest);
@@ -30,7 +32,13 @@ router.get('/sortByTime/:subcategoryID',productController.sortProductByTime);
 router.get('/sortByCondition/:subcategoryID/:condition',productController.sortByCondition);
 
 
-
+//Admin api endPoint
+router.get('/admin/Login',adminController.adminLogin);
+router.get('/admin/totalUser',AuthVerification,isAdmin,adminController.totalUser);
+router.get('/admin/readUserAccount',AuthVerification,isAdmin,adminController.readUserAccount);
+router.get('/admin/DeleteUserAccount',AuthVerification,isAdmin,adminController.deleteUserAccount);
+router.get('/admin/updateAccount/:userID',AuthVerification,isAdmin,adminController.updateAccount);
+router.get('/admin/readProduct/:userID',AuthVerification,isAdmin,adminController.readSingleUserProdcut);
 
 
 

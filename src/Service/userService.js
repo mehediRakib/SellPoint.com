@@ -1,9 +1,6 @@
 
 const userModel=require('../Model/user/userModel');
 const profileModel=require('../Model/user/profileModel');
-const categoryModel=require('../Model/products/categoryModel');
-const subcategoryModel=require('../Model/products/subCategoryModel');
-const productModel=require('../Model/products/ProductModel');
 
 const bcrypt=require('bcrypt');
 const EmailSend = require("../utility/EmailHelper");
@@ -19,8 +16,7 @@ const OtpService=async (req) => {
     let name=reqBody.name;
     let password=reqBody.pass;
     let conPass=reqBody.confirmPass;
-    let userType=reqBody.userType;
-    let secretKey=reqBody.secretKey;
+    let userType=reqBody.role;
     const code= Math.floor(100000+Math.random()*100000)
     const text=`OTP code is ${code}`;
     const subject='Email Verification'
@@ -33,19 +29,10 @@ const OtpService=async (req) => {
         return {status:"fail",data:"Confirm Password Does not match"};
     }
 
-    else if(userType==='admin' && secretKey==='mhr'){
-        await EmailSend(email,text,subject);
-        const hashPass=await bcrypt.hash(password,10);
-        const data=await userModel.updateOne({email:email},{$set:{name:name,otp:code,pass:hashPass,userType:reqBody.userType}},{upsert:true});
-        return {status:"success",data:"6 digit message sent",result:data}
-    }
-    else if(userType==='admin' && secretKey!=='mhr'){
-        return {status:"fail",data:"unauthorized"}
-    }
     else{
         await EmailSend(email,text,subject);
         const hashPass=await bcrypt.hash(password,10);
-        const data=await userModel.updateOne({email:email},{$set:{name:name,otp:code,pass:hashPass,userType:reqBody.userType}},{upsert:true});
+        const data=await userModel.updateOne({email:email},{$set:{name:name,otp:code,pass:hashPass,role:reqBody.role}},{upsert:true});
         return {status:"success",data:"6 digit message sent",result:data}
     }
 }
@@ -76,7 +63,12 @@ const loginRequestService=async (req) => {
             if(isPasswordMatch){
                 const id=user._id;
                 const token=await EncodeToken(reqBody.email,id);
-                return {status: 'success', data: "Login Success",token:token}
+                if(user.role!=='admin'){
+                    return {status: 'success',role:'user', data: "Login Success",token:token}
+                }else {
+                    return {status: 'success',role:'admin', data: "Login Success",token:token}
+                }
+
             }
             else{
                 return {status: 'fail', data: "Invalid email or password",}

@@ -6,7 +6,7 @@ const DataSchema=mongoose.Schema({
     otp:{type:String},
     name:{type:String},
     pass:{type:String,required:true},
-    userType:{type:String},
+    role:{type:String},
     confirmPass:{type:String}
 },
     {

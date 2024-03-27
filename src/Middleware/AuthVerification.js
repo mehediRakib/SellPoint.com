@@ -8,8 +8,8 @@ module.exports=async (req, res, next) => {
 
    let result= await DecodeToken(token);
 
-    if(DecodeToken===null){
-        return res.status(401).json({status:"fails",data:"unauthorised"});
+    if(result===null){
+        return res.status(401).json({status:"fail",data:"unauthorized"});
     }
     else {
         let email=result['email'];
