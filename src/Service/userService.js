@@ -52,44 +52,11 @@ const VerifyOtpService=async (req) => {
     }
 }
 
-const loginRequestService=async (req) => {
-    const reqBody = req.body;
-    const password=reqBody.pass;
-
-    try{
-        const user = await userModel.findOne({email: reqBody.email})
-      if(user){
-            const isPasswordMatch=await compare(password,user.pass);
-            if(isPasswordMatch){
-                const id=user._id;
-                const token=await EncodeToken(reqBody.email,id);
-                if(user.role!=='admin'){
-                    return {status: 'success',role:'user', data: "Login Success",token:token}
-                }else {
-                    return {status: 'success',role:'admin', data: "Login Success",token:token}
-                }
-
-            }
-            else{
-                return {status: 'fail', data: "Invalid email or password",}
-            }
-        }
-      else{
-          return {status:"fail",data:"invalid email or password"}
-      }
-    }
-    catch (e) {
-        return {status:'fail',data:"something went wrong"};
-    }
-}
-
 const userInfoUpdateService=async (req) => {
    try{
        const reqBody = req.body;
        const email=req.headers.email;
-       console.log(email);
        const id= req.headers.userID;
-       console.log("id: ",id);
        await userModel.updateOne({email:email},{name:reqBody.name,contact:reqBody.contact,pass:await bcrypt.hash(reqBody.pass,10)});
        await profileModel.updateOne({userID:id},{img:reqBody.img, userID:id,location:reqBody.location,subLocation:reqBody.subLocation},{upsert:true});
         return {status:"success",data:"Profile successfully updated"}
@@ -136,6 +103,34 @@ const accountDeleteService=async (req)=>{
 
     }
  }
+
+const loginRequestService=async (req)=> {
+    try{
+        let reqBody=req.body;
+        let email=reqBody.email;
+        const user=await userModel.findOne({email:email});
+        if(user){
+            const isPasswordMatch=await bcrypt.compare(reqBody.pass,user.pass)
+            if(isPasswordMatch){
+                const token=await EncodeToken(email,user._id);
+                if(user.role==='admin'){ return {status:"success",token:token,role:'admin'};}
+                else { return {status:"success",token:token,role:'user'};}
+
+            }
+            else{
+                return {status:"fail",data:"Invalid Password"}
+            }
+
+        }
+        else
+        {
+            return {status:"fail",data:"Invalid email or password"};
+        }
+    }catch (e) {
+            return {status:"fail",data:e.toString()};
+    }
+
+}
 
 
 module.exports={

@@ -22,15 +22,15 @@ exports.VerifyOtp=async (req,res)=>{
     }
 }
 
-exports.loginRequest=async (req, res) => {
+exports.loginRequest=async (req,res) => {
     const result = await loginRequestService(req);
-    if(result['status']==='success'){
+    if(result.status==='success'){
         const CookieExpire={expires:new Date(Date.now()+24*60*60*1000),httpOnly: false}
         res.cookie("token",result['token'],CookieExpire);
         res.status(200).json(result);
     }
     else{
-        res.status(200).json(result);
+        res.status(401).json(result);
     }
 }
 

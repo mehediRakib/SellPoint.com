@@ -10,7 +10,7 @@ const adminController=require('../Controller/adminController');
 //user API
 router.post('/userOTP',userController.otpRequest);
 router.get('/verifyOTP/:email/:otp',userController.VerifyOtp);
-router.get('/Login',userController.loginRequest);
+router.post('/Login',userController.loginRequest);
 router.get('/logout',AuthVerification,userController.logoutRequest);
 router.post('/profileUpdate',AuthVerification,userController.userInfoUpdateRequest);
 router.get('/deleteAccount',AuthVerification,userController.DeleteAccount);
