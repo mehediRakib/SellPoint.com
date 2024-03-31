@@ -1,24 +1,37 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import userStore from "../../Store/userStore.js";
+import toast, {Toaster} from "react-hot-toast";
 
-const AppNabvar = () => {
+const MasterNavber = () => {
     const navigate = useNavigate();
 
-    const { isLogin} = userStore();
+    const { isLogin, doLogout } = userStore();
 
     const countryCode = '+880';
-    const phoneNumber = '01611650721';
+    const phoneNumber = '01611650721'; // Your phone number
     const message = encodeURIComponent('Hello! This is an automated message.');
 
     const handleWhatsAppClick = () => {
         const whatsappUrl = `https://wa.me/${countryCode}${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
     }
+
+    const logout = async () => {
+        const res = await doLogout();
+        if (res === 'success') {
+            sessionStorage.clear();
+            localStorage.clear();
+            navigate('/');
+        } else {
+            toast.error("Something went wrong");
+        }
+    }
+
     return (
         <>
-            <div className="w-full h-20 bg-green-700">
-                <div className="flex pt-6">
+            <div className="w-full h-64 bg-green-700">
+                <div className="flex pt-10">
                     <div className="text-white flex flex-grow ml-10">
                         <div className="flex pl-40 space-x-4">
                             <div>
@@ -70,9 +83,25 @@ const AppNabvar = () => {
                         </div>
                     </div>
                 </div>
-          </div>
+                <div className="mt-10">
+                    <div className="flex justify-center pt-10">
+                        <div className="relative">
+                            <div className="flex w-96">
+                                <input className="w-full h-10 rounded-l-3xl pl-5 focus:outline-none focus:ring-2 focus:ring-blue-700" placeholder="Search Here!" />
+                                <button className="bg-blue-500 rounded-r-3xl px-3 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Toaster position="bottom-center" />
         </>
-    )
+    );
 };
 
-export default AppNabvar;
+
+export default MasterNavber;

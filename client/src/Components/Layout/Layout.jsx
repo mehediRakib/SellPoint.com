@@ -4,12 +4,12 @@ import AppNabvar from "./appNabvar.jsx";
 
 const Layout = (props) => {
     return (
-        <div>
-            <Footer/>
-            {props.children};
+        <>
             <AppNabvar/>
+            {props.children}
+            <Footer/>
 
-        </div>
+        </>
     );
 };
 

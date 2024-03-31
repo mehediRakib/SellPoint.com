@@ -22,6 +22,9 @@ const SignUpForm = () => {
         else if(SingUpFormData.email===""){
             toast.error("email required");
         }
+        else if(SingUpFormData.contact===""){
+            toast.error("Contact number required");
+        }
         else if(postBody.pass===""){
             toast.error("password required");
         }
@@ -59,6 +62,10 @@ const SignUpForm = () => {
 
                             <label className="text-gray-800">Email:</label><br/>
                             <input value={SingUpFormData.email} onChange={(e)=>{SignUpFormOnChange('email',e.target.value)}}  type="text" className="w-80 rounded-md border border-gray-300 px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Email:"/><br/>
+
+                            <label className="text-gray-800">Contact:</label><br/>
+                            <input value={SingUpFormData.contact} onChange={(e)=>{SignUpFormOnChange('contact',e.target.value)}}  type="text" className="w-80 rounded-md border border-gray-300 px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Contact:"/><br/>
+
 
                             <label className="text-gray-800">Password:</label><br/>
                             <input value={SingUpFormData.pass} onChange={(e)=>{SignUpFormOnChange('pass',e.target.value)}}  type="password" className="w-80 rounded-md border border-gray-300 px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Password:"/><br/>

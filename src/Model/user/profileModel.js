@@ -3,8 +3,9 @@ const mongoose=require('mongoose');
 const DataSchema=mongoose.Schema({
         userID:{type:mongoose.Schema.Types.ObjectId},
         img: {type: String},
-        location:{type:String},
-        subLocation:{type:String}
+        division:{type:String},
+        district:{type:String},
+        area:{type:String}
 
     },
     {timestamps:true,versionKey:false}

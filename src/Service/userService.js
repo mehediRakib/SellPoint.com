@@ -57,8 +57,8 @@ const userInfoUpdateService=async (req) => {
        const reqBody = req.body;
        const email=req.headers.email;
        const id= req.headers.userID;
-       await userModel.updateOne({email:email},{name:reqBody.name,contact:reqBody.contact,pass:await bcrypt.hash(reqBody.pass,10)});
-       await profileModel.updateOne({userID:id},{img:reqBody.img, userID:id,location:reqBody.location,subLocation:reqBody.subLocation},{upsert:true});
+       await userModel.updateOne({email:email},{name:reqBody.name,contact:reqBody.contact,pass:await bcrypt.hash(reqBody.pass,10)},{upsert:true});
+       await profileModel.updateOne({userID:id},{img:reqBody.img, userID:id,division:reqBody.division,district:reqBody.district,area:reqBody.area},{upsert:true});
         return {status:"success",data:"Profile successfully updated"}
    }catch (e) {
        return {status:"fail",data:e.toString()}

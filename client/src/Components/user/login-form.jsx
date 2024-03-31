@@ -32,7 +32,7 @@ const LoginForm = () => {
             else if(result['status']==='success' && result['role']==='user'){
                 navigate('/')
             }
-            else {
+            else if(result['status']==='fail') {
                 toast.error('Invalid email or password');
             }
         }
@@ -58,10 +58,8 @@ const LoginForm = () => {
                         </div>
                         <div className="text-center mt-4 flex space-x-2">
                             <UserSubmitButton onClick={onLogin} className="rounded-md bg-green-600 w-1/2 p-2 hover:bg-green-800 hover:text-white " text="Login"/>
-
                             <Link to="/create-account" className="rounded-md bg-red-500 w-1/2 p-2 hover:bg-red-800 hover:text-gray-300">Create account</Link>
                         </div>
-
                     </div>
                 </div>
             </div>

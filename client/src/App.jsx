@@ -4,11 +4,13 @@ import LoginPage from "./Pages/Login-Page.jsx";
 import SignUpPage from "./Pages/SignUp-Page.jsx";
 import OtpPages from "./Pages/Otp-pages.jsx";
 import ProfilePage from "./Pages/Profile-page.jsx";
+import HomePage from "./Pages/Home-page.jsx";
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/" element={<HomePage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/create-account" element={<SignUpPage/>}/>
                 <Route path="/verifyOTP" element={<OtpPages/>}/>
