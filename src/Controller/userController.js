@@ -1,5 +1,5 @@
 const {OtpService, VerifyOtpService, loginRequestService, userInfoUpdateService, accountDeleteService,
-    sellProductService, readProfile
+    readUserProfile, readUserDetailsProfile
 } = require("../Service/userService");
 
 
@@ -48,12 +48,20 @@ exports.userInfoUpdateRequest=async (req,res)=>{
 
 exports.DeleteAccount=async (req,res)=>{
     const result=await accountDeleteService(req);
+    let cookieOption={expires:new Date(Date.now()-14*60*60*1000),httpOnly:false};
+    res.clearCookie('token',cookieOption);
     res.status(200).json(result);
 }
 
 
-exports.ReadProfile=async (req,res)=>{
-    const result=await readProfile(req);
+exports.ReadUserProfile=async (req,res)=>{
+    const result=await readUserProfile(req);
+    res.status(200).json(result);
+}
+
+
+exports.ReadUserDetailsProfile=async (req,res)=>{
+    const result=await readUserDetailsProfile(req);
     res.status(200).json(result);
 
 }

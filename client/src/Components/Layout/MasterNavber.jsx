@@ -6,7 +6,7 @@ import toast, {Toaster} from "react-hot-toast";
 const MasterNavber = () => {
     const navigate = useNavigate();
 
-    const { isLogin, doLogout } = userStore();
+    const { isLogin } = userStore();
 
     const countryCode = '+880';
     const phoneNumber = '01611650721'; // Your phone number
@@ -17,16 +17,6 @@ const MasterNavber = () => {
         window.open(whatsappUrl, '_blank');
     }
 
-    const logout = async () => {
-        const res = await doLogout();
-        if (res === 'success') {
-            sessionStorage.clear();
-            localStorage.clear();
-            navigate('/');
-        } else {
-            toast.error("Something went wrong");
-        }
-    }
 
     return (
         <>

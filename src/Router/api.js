@@ -14,7 +14,8 @@ router.post('/Login',userController.loginRequest);
 router.get('/logout',AuthVerification,userController.logoutRequest);
 router.post('/profileUpdate',AuthVerification,userController.userInfoUpdateRequest);
 router.get('/deleteAccount',AuthVerification,userController.DeleteAccount);
-router.get('/readProfile',AuthVerification,userController.ReadProfile)
+router.get('/readProfile',AuthVerification,userController.ReadUserProfile);
+router.get('/readProfileDetails',AuthVerification,userController.ReadUserDetailsProfile);
 
 
 //ProductApi

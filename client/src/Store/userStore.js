@@ -70,30 +70,14 @@ const userStore=create((set)=>({
         return result.data['status'];
     },
 
-    profileFormData: { name: "", email: "", contact: "",pass: "",profile:{division: "", district: "", area: "",img:""} },
+    profileFormData: { name: null, contact: null,pass: null,area: null,img:null,division: null, district: null},
     profileFormDataChange: async (name, value) => {
-        set((state) => {
-            // If the property is within profile, update it separately
-            if (name.startsWith("profile.")) {
-                const profileProperty = name.split(".")[1]; // Get the property name after 'profile.'
-                return {
-                    profileFormData: {
-                        ...state.profileFormData,
-                        profile: {
-                            ...state.profileFormData.profile,
-                            [profileProperty]: value,
-                        },
-                    },
-                };
-            } else {
-                return {
-                    profileFormData: {
-                        ...state.profileFormData,
-                        [name]: value,
-                    },
-                };
-            }
-        });
+        set((state) => ({
+            profileFormData:{
+                ...state.profileFormData,
+                    [name]:value
+    }
+        }));
     },
 
     profileDetails:null,
@@ -114,6 +98,23 @@ const userStore=create((set)=>({
        }
     },
 
+
+    readProfileDetails :async ()=>{
+        try{
+            const res=await axios.get('/api/v1/readProfileDetails');
+            if(res.data['data'].length>0){
+                set({profileFormData:res.data['data'][0]})
+                set({profileDetails:res.data['data'][0]});
+            }
+            else{
+                set({profileDetails:[]});
+            }
+        }
+        catch (e) {
+            unauthorized(e.response.status)
+        }
+    },
+
     doLogout:async ()=>{
         set({isFormSubmit:true});
         const res=await axios.get('/api/v1/logout');
@@ -124,9 +125,16 @@ const userStore=create((set)=>({
     profileUpdate:async (postBody)=>{
         set({isFormSubmit:true});
         const res=await axios.post('/api/v1/profileUpdate',postBody);
-        console.log('res:',res);
         set({isFormSubmit:false});
         return res.data.status;
+    },
+
+    accountDelete:async ()=>{
+        set({isFormSubmit:true});
+        const res=await axios.get('/api/v1/deleteAccount');
+        set({isFormSubmit:false});
+        return res.data.status;
+
     }
 
 }))

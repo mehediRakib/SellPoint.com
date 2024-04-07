@@ -57,9 +57,18 @@ const userInfoUpdateService=async (req) => {
        const reqBody = req.body;
        const email=req.headers.email;
        const id= req.headers.userID;
-       await userModel.updateOne({email:email},{name:reqBody.name,contact:reqBody.contact,pass:await bcrypt.hash(reqBody.pass,10)},{upsert:true});
-       await profileModel.updateOne({userID:id},{img:reqBody.img, userID:id,division:reqBody.division,district:reqBody.district,area:reqBody.area},{upsert:true});
-        return {status:"success",data:"Profile successfully updated"}
+       const password=reqBody.pass;
+
+       if(password===undefined){
+           await userModel.updateOne({email: email}, {$set: {name: reqBody.name, contact: reqBody.contact, pass: password}}, {upsert: true});
+       }
+       else {
+           await userModel.updateOne({email: email}, {$set: {name: reqBody.name, contact: reqBody.contact, pass: await bcrypt.hash(reqBody.pass, 10)}}, {upsert: true});
+       }
+
+       await profileModel.updateOne({userID: id}, {$set: {img: reqBody.img, userID: id, division: reqBody.division, district: reqBody.district, area: reqBody.area}}, {upsert: true});
+
+       return {status:"success",data:"Profile successfully updated"}
    }catch (e) {
        return {status:"fail",data:e.toString()}
    }
@@ -84,53 +93,68 @@ const accountDeleteService=async (req)=>{
 }
 
 
- const readProfile=async (req)=>{
+ const readUserProfile=async (req)=>{
     try{
         const email=req.headers.email;
         let matchStage={$match:{email:email}};
-        const joinWithProfile={$lookup:{from:"profiles",localField:"_id",foreignField:"userID",as:"profile"}};
-        let unWindProfile={$unwind:"$profile"};
-        let projectionStage={$project:{_id:0,otp:0,userType:0,pass:0,'profile._id':0,'profile.userID':0}};
-        const data=await userModel.aggregate([
+        let projectionStage={$project:{_id:0,otp:0,pass:0}};
+
+        const userData=await userModel.aggregate([
             matchStage,
-            joinWithProfile,
-            unWindProfile,
             projectionStage
         ])
-        return {status:"success",data:data};
+        return {status:"success",data:userData};
     }catch (e) {
         return  {status:'fail',data:e}.toString();
 
     }
  }
 
-const loginRequestService=async (req)=> {
+
+const readUserDetailsProfile=async (req)=>{
     try{
-        let reqBody=req.body;
-        let email=reqBody.email;
-        const user=await userModel.findOne({email:email});
-        if(user){
-            const isPasswordMatch=await bcrypt.compare(reqBody.pass,user.pass)
-            if(isPasswordMatch){
-                const token=await EncodeToken(email,user._id);
-                if(user.role==='admin'){ return {status:"success",token:token,role:'admin'};}
-                else { return {status:"success",token:token,role:'user'};}
-
-            }
-            else{
-                return {status:"fail",data:"Invalid Password"}
-            }
-
-        }
-        else
-        {
-            return {status:"fail",data:"Invalid email or password"};
-        }
+        const email=req.headers.email;
+         const user=await userModel.findOne({email:email});
+         const id=user._id;
+        const matchStage={$match: {userID:id}};
+        const result=await profileModel.aggregate([
+            matchStage
+        ])
+        return {status:"success",data:result};
     }catch (e) {
-            return {status:"fail",data:e.toString()};
-    }
+        return  {status:'fail',data:e}.toString();
 
+    }
 }
+
+const loginRequestService = async (req) => {
+    try {
+        const reqBody = req.body;
+        console.log("Login attempt with email:", reqBody.email); // Log email without password
+
+        const user = await userModel.findOne({ email: reqBody.email });
+
+        if (user) {
+            const isPasswordMatch = await bcrypt.compare(reqBody.pass, user.pass);
+
+            if (isPasswordMatch) {
+                const token = await EncodeToken(reqBody.email, user._id);
+                return user.role === 'admin'
+                    ? { status: "success", token, role: 'admin' }
+                    : { status: "success", token, role: 'user' };
+            } else {
+                return { status: "fail", data: "Invalid Password" };
+            }
+        } else {
+            return { status: "fail", data: "Invalid email or password" };
+        }
+    } catch (error) {
+        console.error("Login service error:", error); // Log error for debugging
+        // Handle specific error types here (e.g., database errors) and return appropriate messages
+        return { status: "fail", data: "Login failed" }; // Generic error message for user
+    }
+};
+
 
 
 module.exports={
@@ -139,5 +163,6 @@ module.exports={
     loginRequestService,
     userInfoUpdateService,
     accountDeleteService,
-    readProfile
+    readUserProfile,
+    readUserDetailsProfile
 }
