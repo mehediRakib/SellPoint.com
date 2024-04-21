@@ -31,6 +31,8 @@ router.get('/listByLowPrice/:subcategoryID',productController.listByLowPrice);
 router.get('/listByHighPrice/:subcategoryID',productController.listByHighPrice);
 router.get('/sortByTime/:subcategoryID',productController.sortProductByTime);
 router.get('/sortByCondition/:subcategoryID/:condition',productController.sortByCondition);
+router.get('/clickCategory/:categoryID',productController.readClickCategory);
+router.get('/readLocation',productController.readLocation);
 
 
 //Admin api endPoint

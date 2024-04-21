@@ -5,6 +5,7 @@ import SignUpPage from "./Pages/SignUp-Page.jsx";
 import OtpPages from "./Pages/Otp-pages.jsx";
 import ProfilePage from "./Pages/Profile-page.jsx";
 import HomePage from "./Pages/Home-page.jsx";
+import ProductPage from "./Pages/Product-page.jsx";
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                 <Route path="/create-account" element={<SignUpPage/>}/>
                 <Route path="/verifyOTP" element={<OtpPages/>}/>
                 <Route path="/profile" element={<ProfilePage/>}/>
+                <Route path="/products/:categoryID" element={<ProductPage/>}/>
             </Routes>
         </BrowserRouter>
     );

@@ -20,10 +20,10 @@ const Category = () => {
                     <div className="flex flex-wrap mt-10">
                         {categoryDetails && categoryDetails.map((item, i) => (
                             <div key={i} className="w-1/4 px-1">
-                                <Link to={"/Sub-category/"+item['_id']}>
+                                <Link to={"/products/"+item['_id']}>
                                     <div className="flex items-center p-5">
                                         <div className="w-20 h-20 px-2">
-                                            <img src={item['categoryImg']} alt={item['categoryName']} />
+                                            <img className="h-16 w-20" src={item['categoryImg']} alt={item['categoryName']} />
                                         </div>
                                         <div className="text-lg">
                                             <p>{item['categoryName']}</p>

@@ -17,7 +17,7 @@ const AppNabvar = () => {
     }
     return (
         <>
-            <div className="w-full h-20 bg-green-700">
+            <div className="w-full h-20 bg-green-700 fixed top-0 z-50 ">
                 <div className="flex pt-6">
                     <div className="text-white flex flex-grow ml-10">
                         <div className="flex pl-40 space-x-4">

@@ -288,6 +288,27 @@ const filterProductByConditionService = async (req) => {
 }
 
 
+const readClickCategoryService=async (req)=>{
+   try{
+       const categoryID=new ObjectID(req.params.categoryID);
+       const result=await categoryModel.find({_id: categoryID})
+       return {status:'success',data:result};
+   }catch (e) {
+       return {status:"fail",data:e.toString()};
+   }
+}
+
+
+const readLocationService=async ()=>{
+    try{
+        const result=await productLocationModel.distinct('division');
+        return {status:'success',data:result};
+    }catch (e) {
+        return {status:"fail",data:e.toString()};
+    }
+}
+
+
 module.exports={
     readCategoryService,
     readSubCategoryService,
@@ -300,5 +321,7 @@ module.exports={
     productListByLowPrice,
     productListByHighPrice,
     sortProductByTimeService,
-    filterProductByConditionService
+    filterProductByConditionService,
+    readClickCategoryService,
+    readLocationService
 }
