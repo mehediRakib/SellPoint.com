@@ -70,7 +70,7 @@ const userStore=create((set)=>({
         return result.data['status'];
     },
 
-    profileFormData: { name: null, contact: null,pass: null,area: null,img:null,division: null, district: null},
+    profileFormData: { name: null, contact: null,NewPass: null,area: null,img:null,division: null, district: null,OldPass:null},
     profileFormDataChange: async (name, value) => {
         set((state) => ({
             profileFormData:{
@@ -87,7 +87,7 @@ const userStore=create((set)=>({
          const res=await axios.get('/api/v1/readProfile');
          if(res.data['data'].length>0){
              set({profileFormData:res.data['data'][0]})
-             set({profileDetails:res.data['data'][0]});
+             set({profileDetails:res.data['data']});
          }
          else{
              set({profileDetails:[]});
@@ -104,7 +104,7 @@ const userStore=create((set)=>({
             const res=await axios.get('/api/v1/readProfileDetails');
             if(res.data['data'].length>0){
                 set({profileFormData:res.data['data'][0]})
-                set({profileDetails:res.data['data'][0]});
+                set({profileDetails:res.data['data']});
             }
             else{
                 set({profileDetails:[]});
@@ -135,6 +135,28 @@ const userStore=create((set)=>({
         set({isFormSubmit:false});
         return res.data.status;
 
+    },
+
+
+    userDetails:async ()=>{
+        const res=await axios.get('/api/v1/userIdentification');
+        return res.data['data'];
+    },
+
+    readUserAdDetails:null,
+    readUserAd:async (userID)=>{
+       try {
+           const res=await axios.get(`/api/v1/read-single-user-ad/${userID}`)
+           if(res.data.status==='success'){
+               set({readUserAdDetails:res.data['data']});
+           }
+           else {
+               set({readUserAdDetails:[]});
+           }
+       }catch (e) {
+           unauthorized(e.response.status)
+
+       }
     }
 
 }))

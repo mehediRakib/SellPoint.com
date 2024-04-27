@@ -1,5 +1,5 @@
 const {TotalUserService, adminLoginService, seeUserAccountService, deleteUserAccountService, updateUserAccountService,
-    readSingleUserProductService
+    readSingleUserProductService, deleteUserProductService
 } = require("../Service/adminService");
 
 
@@ -35,5 +35,10 @@ exports.updateAccount=async (req,res)=>{
 
 exports.readSingleUserProdcut=async (req,res)=>{
     const result=await readSingleUserProductService(req);
+    res.status(200).json(result);
+}
+
+exports.deleteUserProduct=async (req,res)=>{
+    const result=await deleteUserProductService(req);
     res.status(200).json(result);
 }

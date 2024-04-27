@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import userStore from "../../Store/userStore.js";
 import toast, {Toaster} from "react-hot-toast";
+import productStore from "../../Store/productStore.js";
 
 const MasterNavber = () => {
     const navigate = useNavigate();
@@ -15,6 +16,18 @@ const MasterNavber = () => {
     const handleWhatsAppClick = () => {
         const whatsappUrl = `https://wa.me/${countryCode}${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
+    }
+    const [keyWord,setKeyword]=useState(null);
+    const {productByCategoryDetails,productByKeyWord}=productStore();
+    const  Search=async () => {
+
+        const res = await productByKeyWord(keyWord);
+        productByCategoryDetails && productByCategoryDetails.map((item,i)=>(
+            navigate(`/products/${item['categoryID']}`)
+        ))
+
+
+
     }
 
 
@@ -45,7 +58,7 @@ const MasterNavber = () => {
                                         </span>
                                     </div>
                                     <div className="space-x-4">
-                                        <Link to="/profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
+                                        <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
                                         <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
                                     </div>
                                 </>
@@ -77,8 +90,8 @@ const MasterNavber = () => {
                     <div className="flex justify-center pt-10">
                         <div className="relative">
                             <div className="flex w-96">
-                                <input className="w-full h-10 rounded-l-3xl pl-5 focus:outline-none focus:ring-2 focus:ring-blue-700" placeholder="Search Here!" />
-                                <button className="bg-blue-500 rounded-r-3xl px-3 flex items-center justify-center">
+                                <input onChange={(e)=>{setKeyword(e.target.value)}} className="w-full h-10 rounded-l-3xl pl-5 focus:outline-none focus:ring-2 focus:ring-blue-700" placeholder="Search Here!" />
+                                <button type="submit" className="bg-blue-500 rounded-r-3xl px-3 flex items-center justify-center" onClick={Search}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                     </svg>

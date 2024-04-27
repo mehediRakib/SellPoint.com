@@ -7,6 +7,7 @@ const EmailSend = require("../utility/EmailHelper");
 const {EncodeToken} = require("../utility/TokenHelper");
 const {compare} = require("bcrypt");
 const mongoose = require("mongoose");
+const productModel = require("../Model/products/ProductModel");
 const ObjectID=mongoose.Types.ObjectId;
 
 
@@ -14,6 +15,7 @@ const OtpService=async (req) => {
     let reqBody = req.body;
     let email=reqBody.email;
     let name=reqBody.name;
+    let contact=reqBody.contact;
     let password=reqBody.pass;
     let conPass=reqBody.confirmPass;
     let userType=reqBody.role;
@@ -32,7 +34,7 @@ const OtpService=async (req) => {
     else{
         await EmailSend(email,text,subject);
         const hashPass=await bcrypt.hash(password,10);
-        const data=await userModel.updateOne({email:email},{$set:{name:name,otp:code,pass:hashPass,role:reqBody.role}},{upsert:true});
+        const data=await userModel.updateOne({email:email},{$set:{name:name,otp:code,pass:hashPass,role:reqBody.role,contact:contact}},{upsert:true});
         return {status:"success",data:"6 digit message sent",result:data}
     }
 }
@@ -97,7 +99,7 @@ const accountDeleteService=async (req)=>{
     try{
         const email=req.headers.email;
         let matchStage={$match:{email:email}};
-        let projectionStage={$project:{_id:0,otp:0,pass:0}};
+        let projectionStage={$project:{otp:0,pass:0}};
 
         const userData=await userModel.aggregate([
             matchStage,
@@ -130,8 +132,6 @@ const readUserDetailsProfile=async (req)=>{
 const loginRequestService = async (req) => {
     try {
         const reqBody = req.body;
-        console.log("Login attempt with email:", reqBody.email); // Log email without password
-
         const user = await userModel.findOne({ email: reqBody.email });
 
         if (user) {
@@ -149,11 +149,28 @@ const loginRequestService = async (req) => {
             return { status: "fail", data: "Invalid email or password" };
         }
     } catch (error) {
-        console.error("Login service error:", error); // Log error for debugging
-        // Handle specific error types here (e.g., database errors) and return appropriate messages
+        console.error("Login service error:", error);
         return { status: "fail", data: "Login failed" }; // Generic error message for user
     }
 };
+
+//For show dashboard
+const userIdentificationService=async (req)=>{
+    const email=req.headers.email;
+    const user=await userModel.findOne({email:email});
+    return {status:'success',data:user.role};
+}
+
+const readSingleUserAdService=async (req)=>{
+    try{
+        const id=req.params.userID;
+        const result=await productModel.find({userID:id});
+        return {status:"success",data:result}
+    }catch (e) {
+        return {status:"fail",data:e.toString()};
+    }
+
+}
 
 
 
@@ -164,5 +181,8 @@ module.exports={
     userInfoUpdateService,
     accountDeleteService,
     readUserProfile,
-    readUserDetailsProfile
+    readUserDetailsProfile,
+    userIdentificationService,
+    readSingleUserAdService
+
 }

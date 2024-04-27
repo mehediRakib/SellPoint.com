@@ -1,5 +1,5 @@
 const {OtpService, VerifyOtpService, loginRequestService, userInfoUpdateService, accountDeleteService,
-    readUserProfile, readUserDetailsProfile
+    readUserProfile, readUserDetailsProfile, userIdentificationService, readSingleUserAdService
 } = require("../Service/userService");
 
 
@@ -64,6 +64,16 @@ exports.ReadUserDetailsProfile=async (req,res)=>{
     const result=await readUserDetailsProfile(req);
     res.status(200).json(result);
 
+}
+
+exports.userIdentification=async (req,res)=>{
+    const result=await userIdentificationService(req);
+    res.status(200).json(result);
+}
+
+exports.readSingleUserAd=async (req,res)=>{
+    const result=await readSingleUserAdService(req);
+    res.status(200).json(result);
 }
 
 

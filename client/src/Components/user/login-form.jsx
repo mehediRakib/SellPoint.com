@@ -40,7 +40,7 @@ const LoginForm = () => {
     }
     return (
         <div>
-            <div className="container justify-center mt-12 flex h-80">
+            <div className="container justify-center mt-32 mb-32 flex h-80">
                 <div className="h-auto bg-white shadow-lg w-1/2 mt-20 flex p-5 justify-center rounded-md  shadow-cyan-500/30">
                     <div className="px-4 flex-grow pt-20">
                         <p className="text-center text-xl"><strong>Welcome to SellPoint.com</strong></p>

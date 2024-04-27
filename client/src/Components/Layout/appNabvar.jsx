@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import userStore from "../../Store/userStore.js";
+import {data} from "autoprefixer";
+import dashboard from "../../assets/images/dashboard.png"
 
 const AppNabvar = () => {
     const navigate = useNavigate();
 
-    const { isLogin} = userStore();
+    const { isLogin,userDetails} = userStore();
 
     const countryCode = '+880';
     const phoneNumber = '01611650721';
@@ -15,9 +17,19 @@ const AppNabvar = () => {
         const whatsappUrl = `https://wa.me/${countryCode}${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
     }
+    const [role,setrole]=useState(null);
+    useEffect(() => {
+        (async () => {
+           setrole(await userDetails());
+        })()
+    }, []);
+
+
+
+
     return (
         <>
-            <div className="w-full h-20 bg-green-700 fixed top-0 z-50 ">
+            <div className="w-full h-20 bg-green-700 fixed top-0 z-10 ">
                 <div className="flex pt-6">
                     <div className="text-white flex flex-grow ml-10">
                         <div className="flex pl-40 space-x-4">
@@ -41,9 +53,22 @@ const AppNabvar = () => {
                                             <p className="text-white text-md">chat</p>
                                         </span>
                                     </div>
-                                    <div className="space-x-4">
-                                        <Link to="/profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
-                                        <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
+                                    <div className="space-x-4 flex">
+                                        {
+                                            role==='admin'?(
+                                               <div>
+                                                   <Link to="/admin/dashboard" className="flex space-x-1">
+                                                       <img className="h-5 w-5 " src={dashboard}/>
+                                                       <p className="text-white">Dashboard</p>
+                                                   </Link>
+                                               </div>
+                                           ):(<></>)
+                                        }
+                                       <div className="space-x-2">
+                                           <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
+                                           <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
+
+                                       </div>
                                     </div>
                                 </>
                             ) : (

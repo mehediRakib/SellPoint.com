@@ -13,9 +13,12 @@ const SignUpForm = () => {
         const postBody={
             name:SingUpFormData.name,
             email:SingUpFormData.email,
+            contact:SingUpFormData.contact,
             pass:SingUpFormData.pass,
-            confirmPass: SingUpFormData.confirmPass
+            confirmPass: SingUpFormData.confirmPass,
+
         }
+
         if(SingUpFormData.name===""){
             toast.error("Name required");
         }

@@ -2,6 +2,8 @@ const userModel=require('../Model/user/userModel');
 const productModel=require('../Model/products/ProductModel');
 const {EncodeToken} = require("../utility/TokenHelper");
 const {compare} = require("bcrypt");
+const mongoose = require("mongoose");
+const ObjectID=mongoose.Types.ObjectId;
 
 const adminLoginService=async (req)=>{
     try{
@@ -51,18 +53,25 @@ const seeUserAccountService=async ()=>{
         return {status:"fail",data:e.toString()}
     }
 }
+ // Adjust the path as necessary
+
+const deleteUserAccountService = async (req) => {
+    try {
+        const userID = req.body;
 
 
-const deleteUserAccountService=async (req)=>{
-    try{
-        const {userID}=req.body;
-        const result=await userModel.deleteOne(userID);
-        return{status:'success',data:result};
-    }catch (e) {
+        const result = await userModel.deleteOne({_id: userID});
 
-        return{status:'fail',data:e.toString()};
+        if (result.deletedCount === 0) {
+            return { status: 'fail', data: 'No user found with the provided ID' };
+        }
+        return { status: 'success', data: result };
+    } catch (e) {
+        console.error(e);  // Log the error for debugging
+        return { status: 'fail', data: e.toString() };
     }
 }
+
 
 
 const updateUserAccountService=async (req)=>{
@@ -78,6 +87,7 @@ const updateUserAccountService=async (req)=>{
 }
 
 
+
 const readSingleUserProductService=async (req)=>{
     try{
         const id=req.params.userID;
@@ -88,11 +98,24 @@ const readSingleUserProductService=async (req)=>{
     }
 }
 
+
+const deleteUserProductService=async (req)=>{
+   try{
+       const productId=req.params.productID;
+       const result=await productModel.deleteOne({_id:productId});
+       return {status:"success",data:result}
+
+   }catch (e) {
+       return  {status:"fail",data:e.toString()};
+   }
+}
+
 module.exports={
     adminLoginService,
     TotalUserService,
     seeUserAccountService,
     deleteUserAccountService,
     updateUserAccountService,
-    readSingleUserProductService
+    readSingleUserProductService,
+    deleteUserProductService
 }

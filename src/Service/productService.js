@@ -22,8 +22,21 @@ const readSubCategoryService=async (req)=>{
 }
 
 const productByCategoryService=async (req)=>{
-    const categoryId=req.params.categoryID;
-    const data=await productModel.find({categoryID:categoryId});
+    const categoryId=new ObjectID(req.params.categoryID);
+    const matchstage={$match:{categoryID:categoryId}};
+    const joinWithSubcategoryModel={$lookup:{from:"subcategories",localField:"subcategoryID",foreignField:"_id",as:"subcategory"}};
+    const unWindSubcategory={$unwind:"$subcategory"};
+    const joinwithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"location"}};
+    const unwindProductLocation={$unwind:"$location"}
+    const projectionStage={$project:{'subcategory.subcategoryImg':0,'subcategory.categoryID':0,'location._id':0,'location.area':0,'location.productID':0}}
+    const data=await productModel.aggregate([
+        matchstage,
+        joinWithSubcategoryModel,
+        unWindSubcategory,
+        joinwithProductLocation,
+        unwindProductLocation,
+        projectionStage
+    ]);
     return {status:'success',data:data};
 }
 
@@ -88,9 +101,14 @@ const ReadProductDetailsService = async (req) => {
 
         const joinWithProductDetails={$lookup:{from:"productdetails",localField:"_id",foreignField:"productID",as:"ProductDetails"}};
         const joinWithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"ProductLocation"}};
+        const joinWithUsers={$lookup:{from:'users', localField:"userID",foreignField:"_id",as:"userInfo"}}
+        const joinWithProfile={$lookup:{from:'profiles',localField:"userID",foreignField:"userID",as:"profile"}}
+        const unwindProfile={$unwind:"$profile"}
+        let unwindUser={$unwind:"$userInfo"}
         let unwindProductDetails = {$unwind: "$ProductDetails" };
         let unwindProductLocation={$unwind: "$ProductLocation"};
-        let projectionStage={$project:{categoryID:0,subcategoryID:0,'ProductDetails._id':0,'ProductDetails.productID':0,'ProductDetails.createdAt':0,'ProductDetails.updatedAt':0,'ProductLocation._id':0,'ProductLocation.productID':0}};
+        let projectionStage={$project:{categoryID:0,subcategoryID:0,'ProductDetails._id':0,'ProductDetails.productID':0,'ProductDetails.createdAt':0,'ProductDetails.updatedAt':0,'ProductLocation._id':0,'ProductLocation.productID':0,'userInfo._id':0,'userInfo.email':0,'userInfo.otp':0,'userInfo.pass':0,
+        'profile._id':0,'profile.userID':0,'profile.img':0 }};
 
 
         const data = await productModel.aggregate([
@@ -99,6 +117,10 @@ const ReadProductDetailsService = async (req) => {
             unwindProductDetails,
             joinWithProductLocation,
             unwindProductLocation,
+            joinWithUsers,
+            unwindUser,
+            joinWithProfile,
+            // unwindProfile,
             projectionStage
         ]);
         return { status: "success", data: data };
@@ -123,7 +145,6 @@ const listByKeywordService = async (req) => {
 
         let projectionStage = {
             $project: {
-                categoryID: 0,
                 subcategoryID: 0,
                 'ProductDetails._id': 0,
                 // 'ProductDetails.productID': 0,
@@ -309,6 +330,20 @@ const readLocationService=async ()=>{
 }
 
 
+const deleteUserAdService=async (req)=>{
+    try {
+        const productID=new ObjectID(req.params.productID);
+        const deleteProduct=await productModel.deleteOne({_id:productID});
+        const delteProductDetails=await productDetailsModel.deleteOne({productID:productID});
+        const delteProductLocation=await productLocationModel.deleteOne({productID:productID});
+
+        return {status:"success",data:deleteProduct};
+    }catch (e) {
+        return {status:"fail",data:e.toString()}
+    }
+}
+
+
 module.exports={
     readCategoryService,
     readSubCategoryService,
@@ -323,5 +358,6 @@ module.exports={
     sortProductByTimeService,
     filterProductByConditionService,
     readClickCategoryService,
-    readLocationService
+    readLocationService,
+    deleteUserAdService
 }

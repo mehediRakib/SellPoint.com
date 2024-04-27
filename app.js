@@ -24,7 +24,7 @@ app.use(cors());
 
 const limiter=expressRateLimit({
     windowMs:15*60*1000,
-    limit:100,
+    limit:2000,
 })
 app.use(limiter);
 
@@ -45,8 +45,8 @@ mongoose.connect(URL,option).then(()=>{
 })
 
 
-app.use(express.json({limit:'50mb'}));
-app.use(express.urlencoded({limit:'50mb'}));
+app.use(express.json({limit: '200mb'}));
+app.use(express.urlencoded({limit: '200mb'}));
 
 
 app.set('etag',false);

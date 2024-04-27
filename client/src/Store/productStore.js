@@ -23,7 +23,6 @@ const productStore=create((set)=>({
     readClickCategory:async (categoryID)=>{
         try{
             const res=await axios.get(`/api/v1/clickCategory/${categoryID}`);
-            console.log("res: ",res);
             if (res.data.status==='success'){
                 set({ClickCategoryDetails:res.data['data']});
             }else {
@@ -77,6 +76,53 @@ const productStore=create((set)=>({
         }catch (e) {
             unauthorized(e.res.status);
         }
+    },
+
+    productDescriptionDetails:null,
+    productDescription:async (productID)=>{
+        try{
+            const res=await axios.get(`/api/v1/readProductDetails/${productID}`);
+            if(res.data.status==='success'){
+                set({productDescriptionDetails:res.data['data']});
+            }else{
+                set({productDescriptionDetails:[]});
+            }
+        }catch (e) {
+            unauthorized(e.response.status)
+        }
+    },
+
+    productSellForm:{productName:"",brandName:"",price:"",condition:"",color:"",model:"",authenticity:"",features:"",shortDes:"",division:"",district:"",area:""},
+    productSellFormOnchange:async (name,value)=>{
+        set((state)=>({
+            productSellForm:{
+                ...state.productSellForm,
+                [name]:value
+            }
+        }))
+    },
+    isFormSubmit:false,
+    productSell:async (postBody,categoryID,subcategoryID)=>{
+        set({isFormSubmit:true})
+        const res=await axios.post(`/api/v1/sellProduct/${categoryID}/${subcategoryID}`,postBody);
+        set({isFormSubmit:false})
+        return res.data.status;
+    },
+    productByKeywordDetails:null,
+    productByKeyWord:async (keyword)=>{
+        const res=await axios.get(`/api/v1/listByKeyword/${keyword}`);
+        if(res.data.status==='success'){
+            set({productByCategoryDetails:res.data['data']});
+        }
+        else {
+            set({productByCategoryDetails:[]});
+        }
+
+    },
+
+    deleteUserProduct:async (userID)=>{
+        const res=await axios.get(`/api/v1/delete-user-ad/${userID}`);
+        return res.data.status;
     }
 
 

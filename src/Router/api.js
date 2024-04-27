@@ -16,6 +16,9 @@ router.post('/profileUpdate',AuthVerification,userController.userInfoUpdateReque
 router.get('/deleteAccount',AuthVerification,userController.DeleteAccount);
 router.get('/readProfile',AuthVerification,userController.ReadUserProfile);
 router.get('/readProfileDetails',AuthVerification,userController.ReadUserDetailsProfile);
+router.get('/userIdentification',AuthVerification,userController.userIdentification);
+router.get('/read-single-user-ad/:userID',AuthVerification,userController.readSingleUserAd);
+
 
 
 //ProductApi
@@ -33,15 +36,17 @@ router.get('/sortByTime/:subcategoryID',productController.sortProductByTime);
 router.get('/sortByCondition/:subcategoryID/:condition',productController.sortByCondition);
 router.get('/clickCategory/:categoryID',productController.readClickCategory);
 router.get('/readLocation',productController.readLocation);
+router.get('/delete-user-ad/:productID',AuthVerification,productController.deleteUserAd);
 
 
 //Admin api endPoint
 router.get('/admin/Login',adminController.adminLogin);
 router.get('/admin/totalUser',AuthVerification,isAdmin,adminController.totalUser);
 router.get('/admin/readUserAccount',AuthVerification,isAdmin,adminController.readUserAccount);
-router.get('/admin/DeleteUserAccount',AuthVerification,isAdmin,adminController.deleteUserAccount);
+router.post('/admin/DeleteUserAccount',AuthVerification,isAdmin,adminController.deleteUserAccount);
 router.get('/admin/updateAccount/:userID',AuthVerification,isAdmin,adminController.updateAccount);
 router.get('/admin/readProduct/:userID',AuthVerification,isAdmin,adminController.readSingleUserProdcut);
+router.get('/admin/deleteProduct/:productID',AuthVerification,isAdmin,adminController.deleteUserProduct);
 
 
 

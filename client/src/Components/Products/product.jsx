@@ -18,7 +18,7 @@ const Product = () => {
 
 
     return (
-        <div className="container mt-28 ">
+        <div className="container mt-28 bg-gray-100 ">
            <div className="flex justify-center">
                <div className="w-5/6 shadow-lg h-full">
                    <div className="flex justify-center mt-8">
@@ -70,7 +70,7 @@ const Product = () => {
                                   <div className="ml-8 text-sky-700">
                                       {
                                           readSubCategoryDetails && readSubCategoryDetails.map((item,i)=>(
-                                              <Link to="subcategory">
+                                              <Link to="">
                                                   <p>{item['subcategoryName']}</p>
                                               </Link>
                                           ))
@@ -79,7 +79,7 @@ const Product = () => {
                               </div>
 
                               <hr className=" mt-10"/>
-                              <div className="mt-10">
+                              <div className="mt-10 mb-10">
                                   <div>
                                       <p className="text-gray-600">Location</p>
                                   </div>
@@ -103,19 +103,22 @@ const Product = () => {
 
                            </div>
 
-                           <div className="ml-4">
+                           <div className="ml-4 ">
                                {
                                    productByCategoryDetails && productByCategoryDetails.map((item,i)=>(
-                                       <Link to="/detail">
+                                       <Link to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${categoryID}`}>
 
-                                           <div tabIndex="0" className="w-full h-52 bg-amber-50 rounded-lg focus:outline-none hover:bg-amber-100 focus:ring-2 focus:ring-cyan-100 mt-6 ">
+                                           <div tabIndex="0" className="w-full h-52 bg-amber-50 rounded-lg focus:outline-none hover:bg-green-100 focus:ring-2 focus:ring-cyan-100 mt-6 ">
                                                <div className="ml-10 pt-10 flex space-x-20">
                                                    <div className=" flex flex-grow ml-16">
                                                        <img className="h-32" src={item['productImg']} alt="Product image"/>
                                                    </div>
-                                                   <div className="ml-5 flex flex-grow">
+                                                   <div className="ml-10 flex flex-grow w-1/2">
                                                        <div>
                                                            <p className="text-xl"><b>{item['productName']}</b></p>
+                                                           <p className="text-gray-500">Division: {item['location']['division']}</p>
+                                                           <p className="text-gray-500"> District: {item['location']['district']}</p>
+                                                           <p className="text-gray-500">{item['subcategory']['subcategoryName']}</p>
                                                            <p className="text-green-800 text-lg"><strong>Price: {item['price']}</strong></p>
 
                                                        </div>
