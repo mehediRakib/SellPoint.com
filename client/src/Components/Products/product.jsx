@@ -17,7 +17,6 @@ const Product = () => {
 
     const [keyWord,setKeyword]=useState("");
 
-
     return (
         <div className=" mt-10 sm:mt-28 bg-gray-100">
             <div className="flex justify-center">
@@ -68,7 +67,7 @@ const Product = () => {
                                     ))}
                                     <div className="ml-8 text-sky-700">
                                         {readSubCategoryDetails && readSubCategoryDetails.map((item, i) => (
-                                            <Link to={"/products/"} key={i}>
+                                            <Link to={`/Products/${item['subcategoryName']}/${categoryID}/?subcategoryId=${item['_id']}`} key={i}>
                                                 <p>{item['subcategoryName']}</p>
                                             </Link>
                                         ))}

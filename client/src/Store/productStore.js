@@ -194,6 +194,17 @@ const productStore=create((set)=>({
             set({DivisionName:[]});
         }
     }
+    ,
+    productBySubcategoryDetails:null,
+    productBySubcategory:async (subcategoryId)=>{
+        const res=await axios.get(`/api/v1/ProductBySubCategory/${subcategoryId}`);
+        if(res.data.status==='success'){
+            set({productBySubcategoryDetails:res.data['data']});
+        }
+        else {
+            set({productBySubcategoryDetails:[]});
+        }
+    }
 
 
 }))

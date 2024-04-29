@@ -18,6 +18,7 @@ import ProfileEditPage from "./Pages/Profile-edit-page.jsx";
 import UserAdPage from "./Pages/User-ad-page.jsx";
 import EditProductDetailsPage from "./Pages/EditProductDetails-page.jsx";
 import ProductByKeyword from "./Pages/Product-By-Keyword.jsx";
+import ProductShowBySubCategory from "./Components/Products/ProductShowBySubCategory.jsx";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/my-ads/:userID" element={<UserAdPage/>}/>
                 <Route path="/edit-product-details/:productID" element={<EditProductDetailsPage/>}/>
                 <Route path="/by-keyword/:Keyword" element={<ProductByKeyword/>}/>
+                <Route path="/Products/:ClickedSubcategoryName/:categoryID" element={<ProductShowBySubCategory/>}/>
 
             </Routes>
         </BrowserRouter>

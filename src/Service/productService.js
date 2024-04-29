@@ -43,8 +43,21 @@ const productByCategoryService=async (req)=>{
 }
 
 const productBySubCategoryService=async (req)=>{
-    const SubCategoryId=req.params.subCategoryID;
-    const data=await productModel.find({subcategoryID:SubCategoryId});
+    const SubCategoryId=new ObjectID(req.params.subCategoryID);
+    const matchStage={$match:{subcategoryID:SubCategoryId}};
+    const joinWithSubcategoryModel={$lookup:{from:"subcategories",localField:"subcategoryID",foreignField:"_id",as:"subcategory"}};
+    const unWindSubcategory={$unwind:"$subcategory"};
+    const joinwithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"location"}};
+    const unwindProductLocation={$unwind:"$location"}
+    const projectionStage={$project:{'subcategory.subcategoryImg':0,'location._id':0,'location.area':0,'location.productID':0}}
+    const data=await productModel.aggregate([
+        matchStage,
+        joinWithSubcategoryModel,
+        unWindSubcategory,
+        joinwithProductLocation,
+        unwindProductLocation,
+        projectionStage
+    ]);
     return {status:'success',data:data};
 }
 
