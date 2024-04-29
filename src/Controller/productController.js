@@ -1,7 +1,7 @@
 const {readCategoryService, readSubCategoryService, productByCategoryService, productBySubCategoryService,
     productSellService, ReadProductDetailsService, listByKeywordService, listByLocationService, productListByLowPrice,
     productListByHighPrice, sortProductByTimeService, filterProductByConditionService,readClickCategoryService,
-    readLocationService, deleteUserAdService
+    readLocationService, deleteUserAdService, readDivisionService, readDistrictService, readDivisionByIdService
 } = require("../Service/productService");
 
 exports.readCategory=async (req,res)=>{
@@ -77,5 +77,20 @@ exports.readLocation=async (req,res)=>{
 
 exports.deleteUserAd=async (req,res)=>{
     const result=await deleteUserAdService(req);
+    res.status(200).json(result);
+}
+
+exports.readDivision=async (req,res)=>{
+    const result=await readDivisionService();
+    res.status(200).json(result);
+}
+
+exports.readDistrict=async (req,res)=>{
+    const result=await readDistrictService(req);
+    res.status(200).json(result);
+}
+
+exports.readDivisionById=async (req,res)=>{
+    const result=await readDivisionByIdService(req);
     res.status(200).json(result);
 }

@@ -7,7 +7,7 @@ import dashboard from "../../assets/images/dashboard.png"
 const AppNabvar = () => {
     const navigate = useNavigate();
 
-    const { isLogin,userDetails} = userStore();
+    const {isLogin, userDetails} = userStore();
 
     const countryCode = '+880';
     const phoneNumber = '01611650721';
@@ -17,10 +17,10 @@ const AppNabvar = () => {
         const whatsappUrl = `https://wa.me/${countryCode}${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
     }
-    const [role,setrole]=useState(null);
+    const [role, setrole] = useState(null);
     useEffect(() => {
         (async () => {
-           setrole(await userDetails());
+            setrole(await userDetails());
         })()
     }, []);
 
@@ -56,19 +56,19 @@ const AppNabvar = () => {
                                     <div className="space-x-4 flex">
                                         {
                                             role==='admin'?(
-                                               <div>
-                                                   <Link to="/admin/dashboard" className="flex space-x-1">
-                                                       <img className="h-5 w-5 " src={dashboard}/>
-                                                       <p className="text-white">Dashboard</p>
-                                                   </Link>
-                                               </div>
-                                           ):(<></>)
+                                                <div>
+                                                    <Link to="/admin/dashboard" className="flex space-x-1">
+                                                        <img className="h-5 w-5 " src={dashboard}/>
+                                                        <p className="text-white">Dashboard</p>
+                                                    </Link>
+                                                </div>
+                                            ):(<></>)
                                         }
-                                       <div className="space-x-2">
-                                           <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
-                                           <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
+                                        <div className="space-x-2">
+                                            <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
+                                            <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
 
-                                       </div>
+                                        </div>
                                     </div>
                                 </>
                             ) : (
@@ -95,7 +95,7 @@ const AppNabvar = () => {
                         </div>
                     </div>
                 </div>
-          </div>
+            </div>
         </>
     )
 };

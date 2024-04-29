@@ -17,6 +17,7 @@ import UserProfilePage from "./Pages/User-profile-page.jsx";
 import ProfileEditPage from "./Pages/Profile-edit-page.jsx";
 import UserAdPage from "./Pages/User-ad-page.jsx";
 import EditProductDetailsPage from "./Pages/EditProductDetails-page.jsx";
+import ProductByKeyword from "./Pages/Product-By-Keyword.jsx";
 
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
                 <Route path="/profile-edit/:userID" element={<ProfileEditPage/>}/>
                 <Route path="/my-ads/:userID" element={<UserAdPage/>}/>
                 <Route path="/edit-product-details/:productID" element={<EditProductDetailsPage/>}/>
+                <Route path="/by-keyword/:Keyword" element={<ProductByKeyword/>}/>
 
             </Routes>
         </BrowserRouter>

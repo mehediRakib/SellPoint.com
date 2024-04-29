@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
 import userStore from "../../Store/userStore.js";
 
 const ProductDetails = () => {
 
-    const {productDescriptionDetails,productByCategoryDetails,productByCategory}=productStore();
+    const {productDescriptionDetails,productByCategoryDetails,productByCategory,productDescription}=productStore();
     const {isLogin}=userStore();
     const countryCode = '+880';
     const message = encodeURIComponent('Hello! This is an automated message.');
@@ -16,12 +16,14 @@ const ProductDetails = () => {
 
     const urlParam=new URLSearchParams(window.location.search);
     const categoryID=urlParam.get('categoryID')
+
     const {productID}=useParams();
 
 
     useEffect(() => {
         (async () => {
             await productByCategory(categoryID);
+            await productDescription(productID);
         })()
     }, [categoryID,productID]);
 

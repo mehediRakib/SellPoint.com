@@ -3,6 +3,8 @@ const subcategoryModel=require('../Model/products/subCategoryModel');
 const productModel=require('../Model/products/ProductModel');
 const productDetailsModel=require('../Model/products/ProductDetailsModel');
 const productLocationModel=require('../Model/products/ProductLocationModel');
+const divisionModel=require('../Model/Location/divisionModel');
+const districtModel=require('../Model/Location/districtModel');
 const mongoose = require("mongoose");
 const ObjectID=mongoose.Types.ObjectId
 
@@ -142,6 +144,9 @@ const listByKeywordService = async (req) => {
         let matchStage = { $match: searchQuery };
         const jointWithproductdetails = { $lookup: { from: "productdetails", localField: "_id", foreignField: "productID", as: "ProductDetails" } };
         let unwindProductDetails = { $unwind: "$ProductDetails" };
+        const joinWithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"location"}};
+        let unwindLocation = { $unwind: "$location" };
+
 
         let projectionStage = {
             $project: {
@@ -160,7 +165,10 @@ const listByKeywordService = async (req) => {
             matchStage,
             jointWithproductdetails,
             unwindProductDetails,
-            projectionStage
+            joinWithProductLocation,
+            unwindLocation,
+            projectionStage,
+
         ]);
         return { status: "success", data: data };
     }
@@ -334,8 +342,8 @@ const deleteUserAdService=async (req)=>{
     try {
         const productID=new ObjectID(req.params.productID);
         const deleteProduct=await productModel.deleteOne({_id:productID});
-        const delteProductDetails=await productDetailsModel.deleteOne({productID:productID});
-        const delteProductLocation=await productLocationModel.deleteOne({productID:productID});
+        await productDetailsModel.deleteOne({productID:productID});
+        await productLocationModel.deleteOne({productID:productID});
 
         return {status:"success",data:deleteProduct};
     }catch (e) {
@@ -343,6 +351,30 @@ const deleteUserAdService=async (req)=>{
     }
 }
 
+
+const readDivisionService=async ()=>{
+    const data=await divisionModel.find();
+    return {status:'success',data:data};
+}
+
+const readDistrictService=async (req)=>{
+   try{
+       const divisionId=new ObjectID(req.params.divisionID);
+       const data=await districtModel.find({divisionID:divisionId})
+       return {status:'success',data:data};
+   }catch (e) {
+       return {status:'fail',data:e.toString()};
+   }
+}
+const readDivisionByIdService=async (req)=>{
+    try{
+        const divisionId=new ObjectID(req.params.divisonID);
+        const data=await divisionModel.find({_id:divisionId})
+        return {status:'success',data:data};
+    }catch (e) {
+        return {status:'fail',data:e.toString()};
+    }
+}
 
 module.exports={
     readCategoryService,
@@ -359,5 +391,8 @@ module.exports={
     filterProductByConditionService,
     readClickCategoryService,
     readLocationService,
-    deleteUserAdService
+    deleteUserAdService,
+    readDivisionService,
+    readDistrictService,
+    readDivisionByIdService
 }

@@ -78,12 +78,31 @@ const productStore=create((set)=>({
         }
     },
 
+     editProductForm:{productName:"",brandName:"",price:"",ProductDetails:{model:"",condition:"",authenticity:"",color:"",features:"",shortDes:""},ProductLocation:{division:"",district:"",area:""}},
+
+    editProductFormOnChange: async (name, value) => {
+        set((prevState) => ({
+            ...prevState,
+            editProductForm: {
+                ...prevState.editProductForm,
+                ProductDetails: {
+                    ...prevState.editProductForm.ProductDetails,
+                    [name]: value
+                }
+            }
+        }));
+    }
+
+,
     productDescriptionDetails:null,
     productDescription:async (productID)=>{
         try{
+            console.log("befor data fetch")
             const res=await axios.get(`/api/v1/readProductDetails/${productID}`);
+            console.log("res: ",res)
             if(res.data.status==='success'){
                 set({productDescriptionDetails:res.data['data']});
+                set({editProductForm:res.data['data'][0]});
             }else{
                 set({productDescriptionDetails:[]});
             }
@@ -113,6 +132,7 @@ const productStore=create((set)=>({
         const res=await axios.get(`/api/v1/listByKeyword/${keyword}`);
         if(res.data.status==='success'){
             set({productByCategoryDetails:res.data['data']});
+            set({productByKeywordDetails:res.data['data']});
         }
         else {
             set({productByCategoryDetails:[]});
@@ -123,6 +143,56 @@ const productStore=create((set)=>({
     deleteUserProduct:async (userID)=>{
         const res=await axios.get(`/api/v1/delete-user-ad/${userID}`);
         return res.data.status;
+    },
+    readDivisionDetails:null,
+    readDivision:async ()=>{
+        try{
+            const res=await axios.get('/api/v1/division');
+            if(res.data.status==='success'){
+                set({readDivisionDetails:res.data['data']});
+            }
+            else{
+                set({readDivisionDetails:[]})
+            }
+        }catch (e) {
+            unauthorized(e.response.state);
+        }
+    },
+
+    readDistrictDetails:null,
+    readDistrict:async (divisionID)=>{
+        try{
+            const res=await axios.get(`/api/v1/district/${divisionID}`);
+            if(res.data.status==='success'){
+                set({readDistrictDetails:res.data['data']});
+            }
+            else{
+                set({readDistrictDetails:[]})
+            }
+        }catch (e) {
+            unauthorized(e.response.state);
+        }
+    },
+
+    listByKeywordDetails:null,
+    listByKeyword:async (keyWord)=>{
+        const res=await axios.get(`/api/v1/listByKeyword/${keyWord}`);
+        if(res.data.status==='success'){
+            set({listByKeywordDetails:res.data['data']});
+        }
+        else{
+            set({listByKeywordDetails:[]});
+        }
+    },
+
+    DivisionName:{division:""},
+    ReadDivisionByID:async (divisionID)=>{
+        const res=await axios.get(`/api/v1/division-by-ID/${divisionID}`);
+        if(res.data.status==='success'){
+            set({DivisionName:res.data['data'][0]})
+        }else {
+            set({DivisionName:[]});
+        }
     }
 
 

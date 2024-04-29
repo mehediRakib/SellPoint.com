@@ -36,6 +36,7 @@ router.get('/sortByTime/:subcategoryID',productController.sortProductByTime);
 router.get('/sortByCondition/:subcategoryID/:condition',productController.sortByCondition);
 router.get('/clickCategory/:categoryID',productController.readClickCategory);
 router.get('/readLocation',productController.readLocation);
+router.get('/division-by-ID/:divisonID',productController.readDivisionById);
 router.get('/delete-user-ad/:productID',AuthVerification,productController.deleteUserAd);
 
 
@@ -48,7 +49,10 @@ router.get('/admin/updateAccount/:userID',AuthVerification,isAdmin,adminControll
 router.get('/admin/readProduct/:userID',AuthVerification,isAdmin,adminController.readSingleUserProdcut);
 router.get('/admin/deleteProduct/:productID',AuthVerification,isAdmin,adminController.deleteUserProduct);
 
+//location
 
+router.get('/division',productController.readDivision);
+router.get('/district/:divisionID',productController.readDistrict);
 
 
 

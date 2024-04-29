@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import UserSubmitButton from "../user/UserSubmitButton.jsx";
 import toast, {Toaster} from "react-hot-toast";
 
+
 const CreateAd = () => {
     const navigate=useNavigate();
 
@@ -29,7 +30,7 @@ const CreateAd = () => {
         }
     }
 
-    const {productSellForm,productSellFormOnchange,productSell}=productStore();
+    const {productSellForm,productSellFormOnchange,productSell,readDivisionDetails,readDivision,readDistrictDetails,readDistrict,DivisionName,ReadDivisionByID}=productStore();
     const postBody={
         productName:productSellForm.productName,
         brandName:productSellForm.brandName,
@@ -40,7 +41,7 @@ const CreateAd = () => {
         authenticity:productSellForm.authenticity,
         features:productSellForm.features,
         shortDes:productSellForm.shortDes,
-        division:productSellForm.division,
+        division:DivisionName.division,
         district:productSellForm.district,
         area:productSellForm.area,
         img1:img1,
@@ -48,6 +49,8 @@ const CreateAd = () => {
     }
 
     const {categoryID,subcategoryID}=useParams();
+
+    const divisionId=productSellForm.division;
 
     const postAd=async () => {
         if(productSellForm.productName===null || productSellForm.productName===""){
@@ -87,8 +90,11 @@ const CreateAd = () => {
     useEffect(() => {
         (async () => {
             await readProfile();
+            await readDivision();
+            await readDistrict(divisionId);
+            await ReadDivisionByID(divisionId)
         })()
-    }, []);
+    }, [divisionId]);
 
     const removeImg2=()=>{
         setImg2(null)
@@ -186,11 +192,28 @@ const CreateAd = () => {
                                     </div>
                                     <div className="my-3">
                                         <label className="text-gray-500 text-sm">Division<span className="text-red-600">*</span>:</label><br/>
-                                        <input type="text" value={productSellForm.division} onChange={(e)=>{productSellFormOnchange("division",e.target.value)}} className="w-full rounded-md border border-cyan-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Divison:"/>
+                                        <select className="w-full rounded-md border border-cyan-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        onChange={(e)=>{productSellFormOnchange("division",e.target.value)}}>
+
+                                            <option value="">select Division</option>
+                                            {
+                                                readDivisionDetails && readDivisionDetails.map((item,i)=>(
+                                                    <option value={item._id}>{item['division']}</option>
+                                                ))
+                                            }
+
+                                        </select>
                                     </div>
                                     <div className="my-3">
                                         <label className="text-gray-500 text-sm">District<span className="text-red-600">*</span>:</label><br/>
-                                        <input type="text" value={productSellForm.district} onChange={(e)=>{productSellFormOnchange("district",e.target.value)}} className="w-full rounded-md border border-cyan-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="District:"/>
+                                       <select onChange={(e)=>productSellFormOnchange("district",e.target.value)} className="w-full rounded-md border border-cyan-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                           <option>Select District</option>
+                                           {
+                                               readDistrictDetails && readDistrictDetails.map((item,i)=>(
+                                                   <option>{item['district']}</option>
+                                               ))
+                                           }
+                                       </select>
                                     </div>
 
                                     <div className="my-3">

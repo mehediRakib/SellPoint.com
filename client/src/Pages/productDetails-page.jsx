@@ -5,13 +5,6 @@ import productStore from "../Store/productStore.js";
 import {useParams} from "react-router-dom";
 
 const ProductDetailsPage = () => {
-    const {productID}=useParams();
-    const {productDescription}=productStore();
-    useEffect(() => {
-        (async () => {
-            await productDescription(productID);
-        })()
-    }, []);
 
     return (
         <Layout>
