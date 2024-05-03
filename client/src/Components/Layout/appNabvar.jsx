@@ -37,7 +37,7 @@ const AppNabvar = () => {
                                 <Link to="/" ><h4 className="text-2xl"><strong>SellPoint.com</strong></h4></Link>
                             </div>
                             <div className="pl-5">
-                                <Link className="text-xl" to="/all-ads">All ads</Link>
+                                <Link className="text-xl" to="/All-categories-products">All ads</Link>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 const {TotalUserService, adminLoginService, seeUserAccountService, deleteUserAccountService, updateUserAccountService,
-    readSingleUserProductService, deleteUserProductService
+    readSingleUserProductService, deleteUserProductService, createCategoryService, deleteCategoryService,
+    categoryByIDService, updateCategoryService, createSubcategoryService, deleteSubcategoryService
 } = require("../Service/adminService");
 
 
@@ -42,3 +43,35 @@ exports.deleteUserProduct=async (req,res)=>{
     const result=await deleteUserProductService(req);
     res.status(200).json(result);
 }
+
+exports.createCategory=async (req,res)=>{
+    const result=await createCategoryService(req);
+    res.status(200).json(result);
+}
+
+exports.deleteCategory=async (req,res)=>{
+    const result= await deleteCategoryService(req);
+    res.status(200).json(result);
+}
+
+exports.categoryById=async (req,res)=>{
+    const result= await categoryByIDService(req);
+    res.status(200).json(result);
+}
+
+exports.updateCategory=async (req,res)=>{
+    const result=await updateCategoryService(req);
+    res.status(200).json(result);
+}
+
+exports.createSubcategory=async (req,res)=>{
+    const result=await createSubcategoryService(req);
+    res.status(200).json(result);
+}
+
+exports.deleteSubcategory=async (req,res)=>{
+    const result= await deleteSubcategoryService(req);
+    res.status(200).json(result);
+}
+
+

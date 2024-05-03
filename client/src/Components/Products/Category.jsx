@@ -16,16 +16,16 @@ const Category = () => {
         <div className="container flex justify-center">
             <div className="h-auto w-3/4">
                 <div className="w-auto ml-32 mt-10 pt-20 ">
-                    <h3><b>Browse items by category</b></h3>
+                    <h3 className="text-xl"><b>Browse items by category</b></h3>
                     <div className="flex flex-wrap mt-10">
                         {categoryDetails && categoryDetails.map((item, i) => (
                             <div key={i} className="w-1/4 px-1">
                                 <Link to={"/products/"+item['_id']}>
                                     <div className="flex items-center p-5">
-                                        <div className="w-20 h-20 px-2">
+                                        <div className="w-28 h-28 px-1 pt-3">
                                             <img className="h-16 w-20" src={item['categoryImg']} alt={item['categoryName']} />
                                         </div>
-                                        <div className="text-lg">
+                                        <div className="text-xl font-sans">
                                             <p>{item['categoryName']}</p>
                                         </div>
                                     </div>

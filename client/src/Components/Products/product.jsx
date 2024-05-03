@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import productStore from "../../Store/productStore.js";
 import {Link, useParams} from "react-router-dom";
+import Location from "./location.jsx";
 
 const Product = () => {
     const {readClickCategory,readSubCategoryDetails,readSubCategory,ClickCategoryDetails,readLocationDetails,readLocation,productByCategoryDetails,productByCategory}=productStore();
@@ -59,6 +60,9 @@ const Product = () => {
                                 <div className="text-gray-400">
                                     <p>Category</p>
                                 </div>
+                                <div className="ml-5 mt-8">
+                                    <Link to="/All-categories-products" className="font-semibold text-md hover:underline hover:text-sky-700">All Categories</Link>
+                                </div>
                                 <div className="ml-10 mt-10">
                                     {ClickCategoryDetails && ClickCategoryDetails.map((item, i) => (
                                         <p key={i}>
@@ -75,19 +79,7 @@ const Product = () => {
                                 </div>
 
                                 <hr className="mt-10"/>
-                                <div className="mt-10 mb-10">
-                                    <div>
-                                        <p className="text-gray-600">Location</p>
-                                    </div>
-                                    <div className="pt-2 ml-4"><strong>All of Bangladesh</strong></div>
-                                    <div className="mt-6 ml-14 text-sky-700">
-                                        {readLocationDetails && readLocationDetails.map((item, i) => (
-                                            <Link to="/" key={i}>
-                                                <p>{item}</p>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
+                               <Location/>
 
                             </div>
                         </div>

@@ -70,7 +70,7 @@ const productSellService=async (req)=>{
         const reqBody=req.body;
         const result=await productModel.create({productName:reqBody.productName,productImg:reqBody.img1,
             brandName:reqBody.brandName, userID:userID,price:reqBody.price,
-            categoryID:categoryID,subcategoryID:subcategoryID});
+            categoryID:categoryID,subcategoryID:subcategoryID,divisionID:reqBody.divisionID});
 
         const productId = result._id;
         const detailsBody={
@@ -389,6 +389,46 @@ const readDivisionByIdService=async (req)=>{
     }
 }
 
+const readAllProductService=async ()=>{
+    try{
+        const joinWithSubcategoryModel={$lookup:{from:"subcategories",localField:"subcategoryID",foreignField:"_id",as:"subcategory"}};
+        const unWindSubcategory={$unwind:"$subcategory"};
+        const joinwithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"location"}};
+        const unwindProductLocation={$unwind:"$location"};
+        const projectionStage={$project:{'subcategory.subcategoryImg':0,'subcategory.categoryID':0,'location._id':0,'location.area':0,'location.productID':0}}
+        const data=await productModel.aggregate([
+            joinWithSubcategoryModel,
+            unWindSubcategory,
+            joinwithProductLocation,
+            unwindProductLocation,
+            projectionStage
+        ]);
+        return {status:"success",data:data};
+    }
+    catch (e) {
+        return {status:"fail",data:e.toString()};
+    }
+}
+
+const readProductByLocationServie=async (req)=>{
+    const divisionId=new ObjectID(req.params.divisionID);
+    const matchStage={$match:{divisionID:divisionId}};
+    const joinWithSubcategoryModel={$lookup:{from:"subcategories",localField:"subcategoryID",foreignField:"_id",as:"subcategory"}};
+    const unWindSubcategory={$unwind:"$subcategory"};
+    const joinwithProductLocation={$lookup:{from:"productlocations",localField:"_id",foreignField:"productID",as:"location"}};
+    const unwindProductLocation={$unwind:"$location"}
+    const projectionStage={$project:{'subcategory.subcategoryImg':0,'subcategory.categoryID':0,'location._id':0,'location.area':0,'location.productID':0}}
+     const result=await productModel.aggregate([
+         matchStage,
+         joinWithSubcategoryModel,
+         unWindSubcategory,
+         joinwithProductLocation,
+         unwindProductLocation,
+         projectionStage
+     ])
+    return {status:'success',data:result};
+}
+
 module.exports={
     readCategoryService,
     readSubCategoryService,
@@ -407,5 +447,7 @@ module.exports={
     deleteUserAdService,
     readDivisionService,
     readDistrictService,
-    readDivisionByIdService
+    readDivisionByIdService,
+    readAllProductService,
+    readProductByLocationServie
 }

@@ -5,7 +5,6 @@ import {unauthorized} from "../Utility/utility.js";
 
 const productStore=create((set)=>({
     categoryDetails:null,
-
     readCategory:async ()=>{
         try{
             const res=await axios.get('/api/v1/readCategory');
@@ -203,6 +202,28 @@ const productStore=create((set)=>({
         }
         else {
             set({productBySubcategoryDetails:[]});
+        }
+    },
+
+    readAllProductDetails:null,
+    readAllProduct:async ()=>{
+        const res=await axios.get('/api/v1/allProduct');
+        if(res.data.status==='success'){
+            set({readAllProductDetails:res.data['data']});
+        }
+        else {
+            set({readAllProductDetails:[]});
+        }
+    },
+
+    readProductByLocationDetails:null,
+    readProductByLocation:async (divisionID)=>{
+        const res=await axios.get(`/api/v1/productByLocation/${divisionID}`);
+        if(res.data.status==='success'){
+            set({readProductByLocationDetails:res.data['data']});
+        }
+        else {
+            set({readProductByLocationDetails:[]});
         }
     }
 

@@ -31,6 +31,7 @@ const CreateAd = () => {
     }
 
     const {productSellForm,productSellFormOnchange,productSell,readDivisionDetails,readDivision,readDistrictDetails,readDistrict,DivisionName,ReadDivisionByID}=productStore();
+    const divisionId=productSellForm.division;
     const postBody={
         productName:productSellForm.productName,
         brandName:productSellForm.brandName,
@@ -41,6 +42,7 @@ const CreateAd = () => {
         authenticity:productSellForm.authenticity,
         features:productSellForm.features,
         shortDes:productSellForm.shortDes,
+        divisionID:divisionId,
         division:DivisionName.division,
         district:productSellForm.district,
         area:productSellForm.area,
@@ -50,7 +52,6 @@ const CreateAd = () => {
 
     const {categoryID,subcategoryID}=useParams();
 
-    const divisionId=productSellForm.division;
 
     const postAd=async () => {
         if(productSellForm.productName===null || productSellForm.productName===""){
@@ -305,7 +306,7 @@ const CreateAd = () => {
                                                     {
                                                         img2!==null?(
                                                                 <>
-                                                                    <im0g className="h-full w-full" src={img2}/>
+                                                                    <img className="h-full w-full" src={img2}/>
                                                                 </>
                                                             ):
                                                             (

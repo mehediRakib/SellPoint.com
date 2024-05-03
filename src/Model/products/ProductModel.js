@@ -6,6 +6,7 @@ const DataSchema=mongoose.Schema({
      userID:{type:mongoose.Schema.Types.ObjectId},
      categoryID:{type:mongoose.Schema.Types.ObjectId},
      subcategoryID:{type:mongoose.Schema.Types.ObjectId},
+     divisionID:{type:mongoose.Schema.Types.ObjectId},
      brandName:{type:String,required:true},
     },
     {

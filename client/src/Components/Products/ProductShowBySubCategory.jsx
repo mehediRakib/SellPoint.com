@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Layout from "../Layout/Layout.jsx";
 import {Link, useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
+import Location from "./location.jsx";
 
 const ProductShowBySubCategory = () => {
 
@@ -63,7 +64,7 @@ const ProductShowBySubCategory = () => {
                                         <p>Category</p>
                                     </div>
                                     <div className="ml-5 mt-8">
-                                        <Link to="/all categories" className="font-semibold text-md ">All Categories</Link>
+                                        <Link to="/All-categories-products" className="font-semibold text-md hover:underline hover:text-sky-700">All Categories</Link>
                                     </div>
                                     <div className="ml-10 mt-5">
                                         {
@@ -83,19 +84,7 @@ const ProductShowBySubCategory = () => {
                                     </div>
 
                                     <hr className="mt-10"/>
-                                    <div className="mt-10 mb-10">
-                                        <div>
-                                            <p className="text-gray-600">Location</p>
-                                        </div>
-                                        <div className="pt-2 ml-4"><strong>All of Bangladesh</strong></div>
-                                        <div className="mt-6 ml-14 text-sky-700">
-                                            {
-                                                readLocationDetails && readLocationDetails.map((item,i)=>(
-                                                    <p>{item}</p>
-                                                ))
-                                            }
-                                        </div>
-                                    </div>
+                                   <Location/>
 
                                 </div>
                             </div>

@@ -4,6 +4,8 @@ const {EncodeToken} = require("../utility/TokenHelper");
 const {compare} = require("bcrypt");
 const mongoose = require("mongoose");
 const ObjectID=mongoose.Types.ObjectId;
+const categoryModel=require('../Model/products/categoryModel');
+const subCategoryModel=require('../Model/products/subCategoryModel');
 
 const adminLoginService=async (req)=>{
     try{
@@ -110,6 +112,62 @@ const deleteUserProductService=async (req)=>{
    }
 }
 
+const createCategoryService=async (req)=>{
+   try{
+       const postBody=req.body;
+       const result=await categoryModel.create(postBody);
+       return {status:"success",data:result};
+   }catch (e) {
+       return  {status:"fail",data:e.toString()};
+   }
+
+}
+
+const deleteCategoryService=async (req)=>{
+    const categoryID=new ObjectID(req.params.categoryID);
+    const data=await categoryModel.deleteOne({_id:categoryID});
+    return {status:"success",data:data};
+
+}
+
+const categoryByIDService=async (req)=>{
+    const categoryID=new ObjectID(req.params.categoryID);
+    const data=await categoryModel.findOne({_id:categoryID});
+    return {status:"success",data:data};
+}
+
+const updateCategoryService=async (req)=>{
+   try{
+       const categoryID=new ObjectID(req.params.categoryID);
+       const postBody=req.body;
+       const data=await categoryModel.updateOne({_id:categoryID},postBody);
+       return {status:"success",data:data};
+   }catch (e) {
+       return {status:"fail",data:e.toString()};
+   }
+}
+
+
+const createSubcategoryService = async (req) => {
+    try {
+        const categoryId = new ObjectID(req.params.categoryID);
+        const postBody = req.body;
+        postBody.categoryID=categoryId;
+        const result = await subCategoryModel.create(postBody);
+        return {status: "success", data: result};
+    } catch (e) {
+        return {status: "fail", data: e.toString()};
+    }
+}
+
+const deleteSubcategoryService=async (req)=>{
+    const subcategoryID=new ObjectID(req.params.subcategoryID);
+    const data=await subCategoryModel.deleteOne({_id:subcategoryID});
+    return {status:"success",data:data};
+
+}
+
+
 module.exports={
     adminLoginService,
     TotalUserService,
@@ -117,5 +175,11 @@ module.exports={
     deleteUserAccountService,
     updateUserAccountService,
     readSingleUserProductService,
-    deleteUserProductService
+    deleteUserProductService,
+    createCategoryService,
+    deleteCategoryService,
+    categoryByIDService,
+    updateCategoryService,
+    createSubcategoryService,
+    deleteSubcategoryService
 }

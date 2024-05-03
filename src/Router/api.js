@@ -38,6 +38,8 @@ router.get('/clickCategory/:categoryID',productController.readClickCategory);
 router.get('/readLocation',productController.readLocation);
 router.get('/division-by-ID/:divisonID',productController.readDivisionById);
 router.get('/delete-user-ad/:productID',AuthVerification,productController.deleteUserAd);
+router.get('/allProduct',productController.readAllProduct);
+router.get('/productByLocation/:divisionID',productController.readProductByLocation);
 
 
 //Admin api endPoint
@@ -48,6 +50,12 @@ router.post('/admin/DeleteUserAccount',AuthVerification,isAdmin,adminController.
 router.get('/admin/updateAccount/:userID',AuthVerification,isAdmin,adminController.updateAccount);
 router.get('/admin/readProduct/:userID',AuthVerification,isAdmin,adminController.readSingleUserProdcut);
 router.get('/admin/deleteProduct/:productID',AuthVerification,isAdmin,adminController.deleteUserProduct);
+router.post('/admin/createCategory',AuthVerification,isAdmin,adminController.createCategory);
+router.get('/admin/deleteCategory/:categoryID',AuthVerification,isAdmin,adminController.deleteCategory);
+router.get('/admin/categoryByID/:categoryID',AuthVerification,isAdmin,adminController.categoryById);
+router.post('/admin/updateCategory/:categoryID',AuthVerification,isAdmin,adminController.updateCategory);
+router.post('/admin/create-subcategory/:categoryID',AuthVerification,isAdmin,adminController.createSubcategory);
+router.get('/admin/delete-subcategory/:subcategoryID',AuthVerification,isAdmin,adminController.deleteSubcategory);
 
 //location
 

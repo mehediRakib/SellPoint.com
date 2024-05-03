@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import userStore from "../../Store/userStore.js";
 import toast, {Toaster} from "react-hot-toast";
 import productStore from "../../Store/productStore.js";
+import dashboard from "../../assets/images/dashboard.png";
 
 const MasterNavber = () => {
     const navigate = useNavigate();
 
-    const { isLogin } = userStore();
+    const { isLogin,userDetails } = userStore();
 
     const countryCode = '+880';
     const phoneNumber = '01611650721'; // Your phone number
@@ -17,6 +18,13 @@ const MasterNavber = () => {
         const whatsappUrl = `https://wa.me/${countryCode}${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
     }
+
+    const [role, setrole] = useState(null);
+    useEffect(() => {
+        (async () => {
+            setrole(await userDetails());
+        })()
+    });
 
     const [searchKeyword,setSearchKeyword]=useState("");
 
@@ -31,7 +39,7 @@ const MasterNavber = () => {
                                 <Link to="/" ><h4 className="text-2xl"><strong>SellPoint.com</strong></h4></Link>
                             </div>
                             <div className="pl-5">
-                                <Link className="text-xl" to="/all-ads">All ads</Link>
+                                <Link className="text-xl" to="/All-categories-products">All ads</Link>
                             </div>
                         </div>
                     </div>
@@ -47,9 +55,22 @@ const MasterNavber = () => {
                                             <p className="text-white text-md">chat</p>
                                         </span>
                                     </div>
-                                    <div className="space-x-4">
-                                        <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
-                                        <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
+                                    <div className="space-x-4 flex">
+                                        {
+                                            role==='admin'?(
+                                                <div>
+                                                    <Link to="/admin/dashboard" className="flex space-x-1">
+                                                        <img className="h-5 w-5 " src={dashboard}/>
+                                                        <p className="text-white">Dashboard</p>
+                                                    </Link>
+                                                </div>
+                                            ):(<></>)
+                                        }
+                                        <div className="space-x-2">
+                                            <Link to="/user-profile" className="w-32 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100">My account</Link>
+                                            <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/create-ad">Post Your Ad</Link>
+
+                                        </div>
                                     </div>
                                 </>
                             ) : (

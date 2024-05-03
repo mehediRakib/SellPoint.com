@@ -3,61 +3,45 @@ import {Link} from "react-router-dom";
 
 const Home = () => {
     return (
-        <div className="mt-28 ">
-            <div>
-                <div>
-                    <div className="ml-10">
-                        <Link to="/admin/dashboard">
-                            <h2 className="font-semibold text-2xl">Dashboard</h2>
-                        </Link>
-                    </div>
-                    <hr/>
+        <div className="mt-8 font-sans text-gray-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center py-12 mt-4">
+                    <Link to="/admin/dashboard" className="text-3xl font-semibold text-indigo-600">
+                        Dashboard
+                    </Link>
                 </div>
-                   <div className="flex w-full h-auto">
-                       <div className="shadow-md bg-slate-100 rounded-md w-1/3 min-h-screen mt-2">
-
-                          <div className="flex space-x-2 ml-10 mt-20 items-center text-c">
-                              <div className="">
-                                  <Link to="/profile"><p>My account </p></Link>
-                                  <Link to="/create-ad"><p>Create Ad </p></Link>
-                                  <Link to=""><p>View Product</p></Link>
-                                  <Link to=""><p>Create Category & Sub Category</p></Link>
-
-                              </div>
-                              <div className="">
-                                  <p> > </p>
-                                  <p> > </p>
-                                  <p> > </p>
-                                  <p> > </p>
-                                  <p> > </p>
-                              </div>
-                          </div>
-                       </div>
-                       <div className="w-full">
-                           <div className="flex space-x-4 justify-center items-center mb-8 ">
-
-                               <Link to="/user-account" className="bg-red-200 w-1/4 h-32 mt-28 rounded-md text-center border  border-orange-400 hover:bg-gray-300 focus:ring-2 focus:ring-amber-200 focus:outline-none transition  hover:translate-y-2 hover:scale-95 duration-300 ease-in-out delay-200">
-                                   <p className="text-center mt-12 text-lg text-black">User account</p>
-                               </Link>
-
-                               <Link to="/view-product" className="bg-cyan-200 w-1/4 h-32 mt-28 rounded-md text-center border  border-orange-400 hover:bg-gray-300 focus:ring-2 focus:ring-amber-200 focus:outline-none transition  hover:translate-y-2 hover:scale-95 duration-300 ease-in-out delay-200">
-                                   <p className="text-center mt-12 text-lg text-black">View Product</p>
-                               </Link>
-
-                               <Link to="/create-ad" className="bg-green-400 w-1/4 h-32 mt-28 rounded-md text-center border  border-orange-400 hover:bg-gray-300 focus:ring-2 focus:ring-amber-200 focus:outline-none transition  hover:translate-y-2 hover:scale-95 duration-300 ease-in-out delay-200">
-                                   <p className="text-center mt-12 text-lg text-black">Create ad</p>
-                               </Link>
-
-
-                           </div>
-                       </div>
-
-                   </div>
-
-               </div>
-
+                <hr />
+                <div className="flex flex-col md:flex-row gap-6 mt-6">
+                    <div className="bg-gray-800 text-white w-full md:w-1/4 p-8 rounded-lg shadow-lg">
+                        <p className="text-xl mb-4 font-semibold">Navigation</p>
+                        <div className="space-y-3">
+                            <Link to="/profile" className="block py-2 hover:bg-gray-700 rounded">My Account</Link>
+                            <Link to="/create-ad" className="block py-2 hover:bg-gray-700 rounded">Create Ad</Link>
+                            <Link to="/All-categories-products" className="block py-2 hover:bg-gray-700 rounded">View Product</Link>
+                            <Link to="/admin/manage-categories" className="block py-2 hover:bg-gray-700 rounded">Manage Categories</Link>
+                        </div>
+                    </div>
+                    <div className="flex-1 space-y-4 p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <Card link="/user-account" bgColor="bg-pink-500" title="User Account" />
+                            <Card link="/All-categories-products" bgColor="bg-blue-500" title="View Products" />
+                            <Card link="/create-ad" bgColor="bg-green-500" title="Create Ad" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
+
+    function Card({ link, bgColor, title }) {
+        return (
+            <Link to={link} className={`rounded-lg p-10 text-center text-xl font-medium text-white transition-all duration-300 ease-in-out ${bgColor} hover:shadow-xl hover:scale-105`}>
+                {title}
+            </Link>
+        );
+    }
+
+
 };
 
 export default Home;
