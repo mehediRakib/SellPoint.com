@@ -85,7 +85,7 @@ const ManageCategory = () => {
                <div className="flex justify-center items-center">
                    <div className="bg-slate-50 rounded-md shadow mt-5 w-2/3">
                        <div className="items-center text-center mt-5  ">
-                           <h3 className="font-semibold text-xl">All Category</h3>
+                           <h3 className="font-semibold text-xl mb-4">All Category</h3>
                            <hr/>
                        </div>
                        <div className="flex justify-center items-center">
@@ -184,7 +184,7 @@ const ManageCategory = () => {
                </div>
 
            </div>
-            <Toaster position="top-center"/>
+            <Toaster position="bottom-center"/>
         </Layout>
     );
 };

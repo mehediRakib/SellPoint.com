@@ -1,73 +1,72 @@
 import React, {useEffect, useState} from 'react';
-import Layout from "../Layout/Layout.jsx";
-import adminStore from "../../Store/adminStore.js";
-import {useNavigate, useParams} from "react-router-dom";
 import toast, {Toaster} from "react-hot-toast";
-import productStore from "../../Store/productStore.js";
+import Layout from "../Layout/Layout.jsx";
+import {useNavigate, useParams} from "react-router-dom";
+import adminStore from "../../Store/adminStore.js";
 
-const EditCategory = () => {
+const EditSubCategory = () => {
+    const navigate=useNavigate();
+
     const [img,setImg]=useState("");
-    const {categoryID}=useParams();
-    const {categoryForm,categoryFomrData,categoryByID,updateCategory}=adminStore();
-    const  {readCategory}=productStore();
+    const {subcategoryID}=useParams();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryID = urlParams.get('categoryId');
+
+    const {subcategoryByID,subcategoryForm,subcategoryFormDataChange,readSubCategory,updateSubcategory}=adminStore();
     useEffect(() => {
         (async ()=>{
-           await categoryByID(categoryID)
+            await subcategoryByID(subcategoryID);
         })()
-    }, [categoryID]);
+    }, [subcategoryID,categoryID]);
+
     const convert64=(e)=>{
         const read=new FileReader();
         read.readAsDataURL((e.target.files[0]));
         read.onload=()=>{
             setImg(read.result);
         }
-
     }
-
     let image;
     if(img===null || img===""){
-         image=categoryForm.categoryImg;
+        image=subcategoryForm.subcategoryImg;
     }else {
         image=img;
     }
-
     const postBody={
-        categoryName:categoryForm.categoryName,
-        categoryImg:image
+        subcategoryName:subcategoryForm.subcategoryName,
+        subcategoryImg:image
     }
+    const SubcategoryUpdate=async ()=>{
+        const res=await updateSubcategory(subcategoryID,postBody);
+        if(res==='success'){
+            toast.success("Subcategory updated successfully");
+            navigate(`/admin/create-subcategory/${categoryID}`);
 
-    const navigate=useNavigate();
+        }else{
+            toast.error("Something went wrong!")
+        }
 
-    const CategoryUpdate=async ()=>{
-            const result=await updateCategory(categoryID,postBody);
-            if(result==='success'){
-                toast.success("Successfully data updated")
-                navigate('/admin/manage-categories')
-            }
-            else{
-                toast.error("Something went wrong!")
-            }
     }
-
     return (
         <Layout>
             <div className="mt-32 ">
                 <div className="flex justify-center items-center">
                     <div className="shadow-md w-1/2 h-auto rounded-md border-t-2 border-t-gray-100 ">
                         <div className="flex items-center justify-center mt-10 mb-5">
-                            <h2 className="text-xl font-semibold">Edit Category</h2>
+                            <h2 className="text-xl font-semibold">Edit Subcategory</h2>
                         </div>
                         <hr/>
                         <div className="flex items-center justify-center mt-10 mb-5">
                             <div className="w-2/3">
                                 <label>Edit category: </label><br/>
-                                <input value={categoryForm.categoryName} onChange={(e)=>{categoryFomrData("categoryName",e.target.value)}} className="w-full border border-cyan-200 rounded-md px-5 py-1" placeholder="Enter text"/>
+                                <input value={subcategoryForm.subcategoryName} onChange={(e)=>{subcategoryFormDataChange("subcategoryName",e.target.value)}} className="w-full border border-cyan-200 rounded-md px-5 py-1" placeholder="Enter text"/>
 
                                 <div className="flex items-center space-x-2 mt-2 justify-center">
                                     {
                                         img===null || img===""?(
                                             <>
-                                                <img src={categoryForm.categoryImg
+                                                <img src={subcategoryForm.subcategoryImg
                                                 } alt="categoryImg" className="w-20 h-20 object-cover rounded-md"/>
                                             </>
                                         ):(
@@ -83,7 +82,7 @@ const EditCategory = () => {
                             </div>
                         </div>
                         <div className="flex justify-center items-center mb-10 ">
-                            <button onClick={()=>{CategoryUpdate()}} className="bg-green-600 rounded-full shadow px-5 py-1 text-white font-semibold border-2 border-cyan-300 hover:bg-green-800">Save</button>
+                            <button onClick={()=>{SubcategoryUpdate()}} className="bg-green-600 rounded-full shadow px-5 py-1 text-white font-semibold border-2 border-cyan-300 hover:bg-green-800">Save</button>
                         </div>
 
 
@@ -92,9 +91,9 @@ const EditCategory = () => {
                 </div>
             </div>
             <Toaster position="bottom-center"/>
-            
+
         </Layout>
     );
 };
 
-export default EditCategory;
+export default EditSubCategory;

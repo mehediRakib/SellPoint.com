@@ -2,21 +2,31 @@ import React, {useEffect, useState} from 'react';
 import productStore from "../../Store/productStore.js";
 import {Link, useParams} from "react-router-dom";
 import Location from "./location.jsx";
+import Slider from "./slider.jsx";
 
 const Product = () => {
-    const {readClickCategory,readSubCategoryDetails,readSubCategory,ClickCategoryDetails,readLocationDetails,readLocation,productByCategoryDetails,productByCategory}=productStore();
-    const {categoryID}=useParams();
+    const {
+        readClickCategory,
+        readSubCategoryDetails,
+        readSubCategory,
+        ClickCategoryDetails,
+        readLocationDetails,
+        readLocation,
+        productByCategoryDetails,
+        productByCategory
+    } = productStore();
+    const {categoryID} = useParams();
 
     useEffect(() => {
         (async () => {
             await readClickCategory(categoryID);
-            await  readSubCategory(categoryID);
+            await readSubCategory(categoryID);
             await readLocation();
             await productByCategory(categoryID)
         })()
     }, []);
 
-    const [keyWord,setKeyword]=useState("");
+    const [keyWord, setKeyword] = useState("");
 
     return (
         <div className=" mt-10 sm:mt-28 bg-gray-100">
@@ -25,9 +35,12 @@ const Product = () => {
                     <div className="flex justify-center mt-4 sm:mt-8">
                         <div className="flex-grow px-4 sm:px-10 flex">
                             <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="blue" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
                                 </svg>
                             </div>
                             <div>
@@ -35,13 +48,18 @@ const Product = () => {
                             </div>
                         </div>
                         <div className="flex-grow hidden sm:block">
-
                         </div>
                         <div className="flex-grow flex justify-end mr-4 sm:mr-10 relative">
-                            <input onChange={(e)=>{setKeyword(e.target.value)}} className="w-full sm:w-96 h-10 border border-gray-300 rounded-full px-4 sm:px-10" placeholder="Search here!"/>
-                            <Link to={keyWord.length>0?`/by-keyword/${keyWord}`:'/'} className="absolute inset-y-0 right-0 bg-blue-500 rounded-r-full px-3 items-center pt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            <input onChange={(e) => {
+                                setKeyword(e.target.value)
+                            }} className="w-full sm:w-96 h-10 border border-gray-300 rounded-full px-4 sm:px-10"
+                                   placeholder="Search here!"/>
+                            <Link to={keyWord.length > 0 ? `/by-keyword/${keyWord}` : '/'}
+                                  className="absolute inset-y-0 right-0 bg-blue-500 rounded-r-full px-3 items-center pt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
                                 </svg>
                             </Link>
                         </div>
@@ -61,7 +79,9 @@ const Product = () => {
                                     <p>Category</p>
                                 </div>
                                 <div className="ml-5 mt-8">
-                                    <Link to="/All-categories-products" className="font-semibold text-md hover:underline hover:text-sky-700">All Categories</Link>
+                                    <Link to="/All-categories-products"
+                                          className="font-semibold text-md hover:underline hover:text-sky-700">All
+                                        Categories</Link>
                                 </div>
                                 <div className="ml-10 mt-10">
                                     {ClickCategoryDetails && ClickCategoryDetails.map((item, i) => (
@@ -71,7 +91,9 @@ const Product = () => {
                                     ))}
                                     <div className="ml-8 text-sky-700">
                                         {readSubCategoryDetails && readSubCategoryDetails.map((item, i) => (
-                                            <Link to={`/Products/${item['subcategoryName']}/${categoryID}/?subcategoryId=${item['_id']}`} key={i}>
+                                            <Link
+                                                to={`/Products/${item['subcategoryName']}/${categoryID}/?subcategoryId=${item['_id']}`}
+                                                key={i}>
                                                 <p>{item['subcategoryName']}</p>
                                             </Link>
                                         ))}
@@ -79,21 +101,24 @@ const Product = () => {
                                 </div>
 
                                 <hr className="mt-10"/>
-                               <Location/>
+                                <Location/>
 
                             </div>
                         </div>
                         <div className="flex-grow">
                             <div>
-                                {/*<Slider/>*/}
+                                <Slider/>
 
                             </div>
 
                             <div className="ml-4">
                                 {productByCategoryDetails && productByCategoryDetails.map((item, i) => (
-                                    <Link to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${categoryID}`} key={i}>
+                                    <Link
+                                        to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${categoryID}`}
+                                        key={i}>
 
-                                        <div tabIndex="0" className="w-full h-52 bg-white rounded-lg focus:outline-none hover:shadow-md focus:ring-2 focus:ring-cyan-100 mt-6">
+                                        <div tabIndex="0"
+                                             className="w-full h-52 bg-white rounded-lg focus:outline-none hover:shadow-md focus:ring-2 focus:ring-cyan-100 mt-6">
                                             <div className="ml-10 pt-6 flex space-x-20">
                                                 <div className="flex flex-grow ml-16 w-1/4">
                                                     <img className="h-32" src={item['productImg']} alt="Product image"/>
@@ -104,7 +129,8 @@ const Product = () => {
                                                         <p className="text-gray-500">Division: {item['location']['division']}</p>
                                                         <p className="text-gray-500">District: {item['location']['district']}</p>
                                                         <p className="text-gray-500">{item['subcategory']['subcategoryName']}</p>
-                                                        <p className="text-green-800 text-lg"><strong>Price: {item['price']}</strong></p>
+                                                        <p className="text-green-800 text-lg">
+                                                            <strong>Price: {item['price']}</strong></p>
 
                                                     </div>
                                                 </div>

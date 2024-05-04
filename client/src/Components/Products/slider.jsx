@@ -1,66 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
+import {BsChevronCompactLeft, BsChevronCompactRight} from "react-icons/bs";
+import {RxDotFilled} from "react-icons/rx";
 
 const Slider = () => {
-    const { productByCategory } = productStore(); // Assuming this is a hook returning functions from a context or store
-    const { categoryID } = useParams();
 
-    // State to store the list of images and current index
-    const [images, setImages] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    // Fetching the products by category when the component mounts or categoryID changes
+    const {categoryID} = useParams();
+    const {productByCategoryDetails, productByCategory} = productStore();
+    const [img, setImg] = useState([]);
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
-        const fetchProducts = async () => {
-            const data = await productByCategory(categoryID);
-            setImages(data); // Assuming data is the array of product images
-        };
-
-        fetchProducts();
+        (async () => {
+            await productByCategory(categoryID)
+                .then(data => {
+                    setImg(data.map(item => item.productImg));
+                })
+                .catch(err => {
+                    setLoading(false);
+                })
+        })()
     }, [categoryID]);
 
-    // Function to navigate to the previous image
-    const handlePrev = () => {
-        setCurrentIndex((prevIndex) => prevIndex > 0 ? prevIndex - 1 : images.length - 1);
-    };
+    const [currentIndex,setCurrentIndex]=useState(0);
+    const prevSlide=async ()=>{
+        const isFirstSlide=currentIndex===0;
+        const newIndex=isFirstSlide? img.length-1:currentIndex-1;
+        setCurrentIndex(newIndex);
+    }
 
-    // Function to navigate to the next image
-    const handleNext = () => {
-        setCurrentIndex((prevIndex) => prevIndex < images.length - 1 ? prevIndex + 1 : 0);
-    };
+    const nextSlide=()=>{
+        const isLastSlide=currentIndex===img.length-1;
+        const newIndex=isLastSlide?0:currentIndex+1;
+        setCurrentIndex(newIndex);
+    }
+    const gotoSlide=async (index)=>{
+        setCurrentIndex(index);
 
+    }
+
+    const autoSlide = true; // Set this to true to enable auto sliding
+    const autosliderInterval = 3000; // Interval in milliseconds
+
+    useEffect(() => {
+        let interval = null;
+        if (autoSlide) {
+            interval = setInterval(() => {
+                nextSlide(); // Call the nextSlide function to go to the next slide
+            }, autosliderInterval);
+        }
+        return () => {
+            if (interval) {
+                clearInterval(interval); // Clear the interval on component unmount
+            }
+        };
+    }, [currentIndex, autoSlide]);
     return (
-        <div>
-            <div className="relative overflow-hidden rounded-lg">
-                <div className="carousel-inner h-full w-full relative">
-                    {images.map((image, index) => (
-                        <div
-                            key={image.id} // Assuming each image has a unique id
-                            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-300 ease-in-out ${
-                                index === currentIndex ? "opacity-100" : "opacity-0"
-                            }`}
+        <div className="m-10">
+            <div className="max-w-lg h-auto m-auto py-16 px-4 relative group ">
+                <div>
+                    <img src={img[currentIndex]} className="w-full h-full rounded-2xl bg-center bg-cover duration-500"/>
+                </div>
+                <div className="hidden group-hover:block absolute inset-y-1/2 -translate-x-0 left-5 text-2xl h-10 w-10 py-1 px-1 bg-black/15 rounded-full text-white cursor-pointer  ">
+                    <BsChevronCompactLeft onClick={prevSlide} size={30}/>
+                </div>
+                <div className="hidden group-hover:block absolute inset-y-1/2 -translate-x-0 right-5 text-2xl h-10 w-10 py-1 px-1 bg-black/15 rounded-full text-white cursor-pointer  ">
+                    <BsChevronCompactRight onClick={nextSlide} size={30}/>
+                </div>
+                <div className="flex justify-center py-2 top-4">
+                    {img.map((item,i)=>(
+                        <div className="text-black cursor-pointer text-2xl"
+                             key={i}
+                             onClick={()=>gotoSlide(i)}
                         >
-                            <img className="object-cover w-full h-full" src={image.productImage} alt={image.alt || 'Product Image'} />
+                            <RxDotFilled/>
                         </div>
                     ))}
                 </div>
-                {images.length > 1 && (
-                    <>
-                        <button onClick={handlePrev} className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 opacity-50 hover:opacity-75 p-2 rounded-full focus:outline-none z-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7-1.41-1.41L6 12l8.41 8.41z" />
-                            </svg>
-                        </button>
-                        <button onClick={handleNext} className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 opacity-50 hover:opacity-75 p-2 rounded-full focus:outline-none z-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7 1.41 1.41L18 12l-8.41-8.41z" />
-                            </svg>
-                        </button>
-                    </>
-                )}
             </div>
         </div>
+
     );
 };
 

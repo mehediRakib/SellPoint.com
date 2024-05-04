@@ -24,6 +24,7 @@ import ProductBySearchLocation from "./Components/Products/Product-By-SearchLoca
 import ManageCategory from "./Components/Admin/Manage-category.jsx";
 import EditCategory from "./Components/Admin/Edit-category.jsx";
 import CreateSubcategory from "./Components/Admin/create-subcategory.jsx";
+import EditSubCategory from "./Components/Admin/Edit-subCategory.jsx";
 
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
                 <Route path="/admin/manage-categories" element={<ManageCategory/>}/>
                 <Route path="/admin/edit-category/:categoryID" element={<EditCategory/>}/>
                 <Route path="/admin/create-subcategory/:categoryID" element={<CreateSubcategory/>}/>
+                <Route path="/admin/edit-subcategory/:subcategoryID" element={<EditSubCategory/>}/>
 
             </Routes>
         </BrowserRouter>

@@ -68,6 +68,7 @@ const productStore=create((set)=>({
             const res=await axios.get(`/api/v1/ProductByCategory/${categoryID}`);
             if(res.data.status==='success'){
                 set({productByCategoryDetails:res.data['data']});
+                return res.data['data'];
             }
             else{
                 set({productByCategoryDetails:[]});

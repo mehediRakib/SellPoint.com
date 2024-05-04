@@ -100,7 +100,36 @@ const adminStore=create((set)=>({
     deleteSubcategoryItem:async (subcategoryID)=>{
         const res=await axios.get(`/api/v1/admin/delete-subcategory/${subcategoryID}`);
         return res.data.status;
+    },
+
+    subcategoryByID:async (subcategoryID)=>{
+        const res=await axios.get(`/api/v1/admin/subcategory-by-Id/${subcategoryID}`);
+        if(res.data.status==='success'){
+            set({subcategoryForm:res.data['data']})
+        }
+        else {
+            set({subcategoryForm:[]});
+        }
+    },
+
+    updateSubcategory:async (subcategoryID,postBody)=>{
+        const res=await axios.post(`/api/v1/admin/update-Sub-category/${subcategoryID}`,postBody);
+        return res.data.status;
+    },
+    totalAdDetails:null,
+    totalAd:async ()=>{
+        const res=await axios.get('/api/v1/admin/countAd');
+        return res.data;
+
+    },
+
+    totalUserDetails:null,
+    totalUser:async ()=>{
+        const res=await axios.get('/api/v1/admin/totalUser');
+        return res.data;
     }
+
+
 
 
 }))
