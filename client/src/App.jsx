@@ -25,6 +25,8 @@ import ManageCategory from "./Components/Admin/Manage-category.jsx";
 import EditCategory from "./Components/Admin/Edit-category.jsx";
 import CreateSubcategory from "./Components/Admin/create-subcategory.jsx";
 import EditSubCategory from "./Components/Admin/Edit-subCategory.jsx";
+import PrivateAdminRoute from "./Components/PrivateAdminRoute.jsx";
+import PrivateUserRoute from "./Components/PrivateUserRoute.jsx";
 
 
 const App = () => {
@@ -39,7 +41,6 @@ const App = () => {
                 <Route path="/my-account/:userID" element={<ProfilePage/>}/>
                 <Route path="/products/:categoryID" element={<ProductPage/>}/>
                 <Route path="/productDetails/:productName/:productID" element={<ProductDetailsPage/>}/>
-                <Route path="/create-ad" element={<CreateAdPage/>}/>
                 <Route path="/:categoryName/:categoryID" element={<SubcategoryPage/>}/>
                 <Route path="/:subcategoryName/:categoryID/:subcategoryID" element={<CreateAd/>}/>
                 <Route path="/user-account" element={<UserAccountPage/>}/>
@@ -51,14 +52,26 @@ const App = () => {
                 <Route path="/All-categories-products" element={<AllProductDisplayPage/>}/>
                 <Route path="/Product-by-division/:DivisionName/:divisionID" element={<ProductBySearchLocation/>}/>
 
+                //User Route
+                <Route to="/" element={<PrivateUserRoute/>}>
+                    <Route path="create-ad" element={<CreateAdPage/>}/>
+                </Route>
+
+
 
                 //Admin Route
-                <Route path="/admin/dashboard" element={<AdminHomePage/>}/>
-                <Route path="/admin/user-product/:userID" element={<UserProductPage/>}/>
-                <Route path="/admin/manage-categories" element={<ManageCategory/>}/>
-                <Route path="/admin/edit-category/:categoryID" element={<EditCategory/>}/>
-                <Route path="/admin/create-subcategory/:categoryID" element={<CreateSubcategory/>}/>
-                <Route path="/admin/edit-subcategory/:subcategoryID" element={<EditSubCategory/>}/>
+                <Route path="/admin" element={<PrivateAdminRoute/>}>
+                    <Route path="dashboard" element={<AdminHomePage/>}/>
+                    <Route path="user-product/:userID" element={<UserProductPage/>}/>
+                    <Route path="manage-categories" element={<ManageCategory/>}/>
+                    <Route path="edit-category/:categoryID" element={<EditCategory/>}/>
+                    <Route path="create-subcategory/:categoryID" element={<CreateSubcategory/>}/>
+                    <Route path="edit-subcategory/:subcategoryID" element={<EditSubCategory/>}/>
+                </Route>
+
+
+
+
 
             </Routes>
         </BrowserRouter>

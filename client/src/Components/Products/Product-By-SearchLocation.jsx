@@ -5,6 +5,7 @@ import TopBar from "./Top-Bar.jsx";
 import Location from "./location.jsx";
 import {Link, useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
+import Slider from "./slider.jsx";
 
 const ProductBySearchLocation = () => {
     const {divisionID}=useParams();
@@ -45,7 +46,6 @@ const ProductBySearchLocation = () => {
                             <div className="flex-grow">
                                 <div>
                                     {/*<Slider/>*/}
-
                                 </div>
 
                                 <div className="ml-4">

@@ -1,6 +1,7 @@
 const {TotalUserService, adminLoginService, seeUserAccountService, deleteUserAccountService, updateUserAccountService,
     readSingleUserProductService, deleteUserProductService, createCategoryService, deleteCategoryService,
-    categoryByIDService, updateCategoryService, createSubcategoryService, deleteSubcategoryService
+    categoryByIDService, updateCategoryService, createSubcategoryService, deleteSubcategoryService,
+    subcategoryByIDService, UpdateSubcategoryByIDService, totalAdService
 } = require("../Service/adminService");
 
 
@@ -71,6 +72,21 @@ exports.createSubcategory=async (req,res)=>{
 
 exports.deleteSubcategory=async (req,res)=>{
     const result= await deleteSubcategoryService(req);
+    res.status(200).json(result);
+}
+
+exports.SubcategoryById=async (req,res)=>{
+    const result= await subcategoryByIDService(req);
+    res.status(200).json(result);
+}
+
+exports.updateSubcategoryByID=async (req,res)=>{
+    const result=await UpdateSubcategoryByIDService(req);
+    res.status(200).json(result);
+}
+
+exports.totalAd=async (req,res)=>{
+    const result=await totalAdService();
     res.status(200).json(result);
 }
 

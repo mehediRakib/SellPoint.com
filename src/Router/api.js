@@ -56,6 +56,9 @@ router.get('/admin/categoryByID/:categoryID',AuthVerification,isAdmin,adminContr
 router.post('/admin/updateCategory/:categoryID',AuthVerification,isAdmin,adminController.updateCategory);
 router.post('/admin/create-subcategory/:categoryID',AuthVerification,isAdmin,adminController.createSubcategory);
 router.get('/admin/delete-subcategory/:subcategoryID',AuthVerification,isAdmin,adminController.deleteSubcategory);
+router.get('/admin/subcategory-by-Id/:subcategoryID',AuthVerification,isAdmin,adminController.SubcategoryById);
+router.post('/admin/update-Sub-category/:subcategoryID',AuthVerification,isAdmin,adminController.updateSubcategoryByID);
+router.get('/admin/countAd',AuthVerification,isAdmin,adminController.totalAd);
 
 //location
 

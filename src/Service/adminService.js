@@ -167,6 +167,36 @@ const deleteSubcategoryService=async (req)=>{
 
 }
 
+const subcategoryByIDService=async (req)=>{
+    const subcategoryID=new ObjectID(req.params.subcategoryID);
+    const data=await subCategoryModel.findOne({_id:subcategoryID});
+    return {status:"success",data:data};
+}
+
+const UpdateSubcategoryByIDService=async (req)=>{
+   try{
+       const subcategoryID=new ObjectID(req.params.subcategoryID);
+       const postBody=req.body;
+       const data=await subCategoryModel.updateOne({_id:subcategoryID},postBody);
+       return {status:"success",data:data};
+   }catch (e) {
+       return {status:'fail',data:e.toString()};
+   }
+}
+
+const totalAdService=async ()=>{
+   try{
+       const data=await productModel.countDocuments();
+       return {status:'success',data:data};
+   }catch (e) {
+       return {status:'fail',data:e.toString()}
+   }
+}
+
+
+
+
+
 
 module.exports={
     adminLoginService,
@@ -181,5 +211,8 @@ module.exports={
     categoryByIDService,
     updateCategoryService,
     createSubcategoryService,
-    deleteSubcategoryService
+    deleteSubcategoryService,
+    subcategoryByIDService,
+    UpdateSubcategoryByIDService,
+    totalAdService
 }

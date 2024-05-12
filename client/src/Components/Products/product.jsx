@@ -108,7 +108,6 @@ const Product = () => {
                         <div className="flex-grow">
                             <div>
                                 <Slider/>
-
                             </div>
 
                             <div className="ml-4">
