@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Outlet,Navigate} from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import userStore from "../Store/userStore.js";
 
 const PrivateAdminRoute = () => {
@@ -12,7 +12,7 @@ const PrivateAdminRoute = () => {
                 setRole(item['role']);
             })
         })()
-    }, [role,Date.now()]);
+    }, [role,profileDetails]);
     return (
        <>
            {

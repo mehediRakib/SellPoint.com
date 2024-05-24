@@ -6,11 +6,11 @@ import {Link} from "react-router-dom";
 
 const Footer = () => {
     return (
-        <div className="flex flex-col w-full min-h-full  bg-gray-300 mt-8">
+        <div className="flex flex-col w-full min-h-full  bg-gray-100 mt-8">
             <hr className="border-1 border-green-700" />
             <div className="container p-5 flex-grow">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 px-20 pl-24 pt-5 ">
                     <div className="space-y-4">
                         <p className="text-lg text-gray-700 font-bold">Download Our app</p>
                         <div className="flex space-x-4">
@@ -46,8 +46,8 @@ const Footer = () => {
                         <p className="text-lg text-gray-700 font-bold">Help and Support</p>
                         <div className="text-blue-800 space-y-2">
                             <p><Link to="">FAQ</Link></p>
-                            <p><Link to="">Stay Safe</Link></p>
-                            <p><Link to="">Contact Us</Link></p>
+                            <p><Link to="/stay-safe">Stay Safe</Link></p>
+                            <p><Link to="/contact-us">Contact Us</Link></p>
                         </div>
                     </div>
 
@@ -56,9 +56,9 @@ const Footer = () => {
                         <p className="text-lg text-gray-700 font-bold">Follow SellPoint</p>
                         <div className="text-blue-800 space-y-2">
                             <p><Link to="">Blog</Link></p>
-                            <p><Link to="">Facebook</Link></p>
-                            <p><Link to="">X</Link></p>
-                            <p><Link to="">YouTube</Link></p>
+                            <p><Link to="https://www.facebook.com/profile.php?id=100084533238325">Facebook</Link></p>
+                            <p><Link to="https://x.com/X?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">X</Link></p>
+                            <p><Link to="https://www.youtube.com/">YouTube</Link></p>
                         </div>
                     </div>
 
@@ -66,10 +66,10 @@ const Footer = () => {
                     <div>
                         <p className="text-lg text-gray-700 font-bold">About SellPoint.com</p>
                         <div className="text-blue-800 space-y-2">
-                            <p><Link to="">About Us</Link></p>
+                            <p><Link to="/about-us">About Us</Link></p>
                             <p><Link to="">Careers</Link></p>
-                            <p><Link to="">Terms and Conditions</Link></p>
-                            <p><Link to="">Privacy Policy</Link></p>
+                            <p><Link to="/terms-and-condition">Terms and Conditions</Link></p>
+                            <p><Link to="/privacy-policy">Privacy Policy</Link></p>
                             <p><Link to="">Site Map</Link></p>
                         </div>
                     </div>

@@ -27,6 +27,11 @@ import CreateSubcategory from "./Components/Admin/create-subcategory.jsx";
 import EditSubCategory from "./Components/Admin/Edit-subCategory.jsx";
 import PrivateAdminRoute from "./Components/PrivateAdminRoute.jsx";
 import PrivateUserRoute from "./Components/PrivateUserRoute.jsx";
+import AboutUsPage from "./Pages/FooterSection-Page/AboutUs-page.jsx";
+import ContactUsPage from "./Pages/FooterSection-Page/Contact-us-page.jsx";
+import SafetyPage from "./Pages/FooterSection-Page/Safety-page.jsx";
+import TermsConditionPage from "./Pages/FooterSection-Page/Terms-condition-Page.jsx";
+import PrivacyPolicyPage from "./Pages/FooterSection-Page/Privacy-policy-page.jsx";
 
 
 const App = () => {
@@ -52,14 +57,21 @@ const App = () => {
                 <Route path="/All-categories-products" element={<AllProductDisplayPage/>}/>
                 <Route path="/Product-by-division/:DivisionName/:divisionID" element={<ProductBySearchLocation/>}/>
 
-                //User Route
+                {/* Manage Footer section*/}
+                <Route path="/about-us" element={<AboutUsPage/>}/>
+                <Route path="/contact-us" element={<ContactUsPage/>}/>
+                <Route path="/stay-safe" element={<SafetyPage/>}/>
+                <Route path="/terms-and-condition" element={<TermsConditionPage/>}/>
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage/>}/>
+
+                {/*//User Route*/}
                 <Route to="/" element={<PrivateUserRoute/>}>
                     <Route path="create-ad" element={<CreateAdPage/>}/>
                 </Route>
 
 
 
-                //Admin Route
+                {/*//Admin Route*/}
                 <Route path="/admin" element={<PrivateAdminRoute/>}>
                     <Route path="dashboard" element={<AdminHomePage/>}/>
                     <Route path="user-product/:userID" element={<UserProductPage/>}/>

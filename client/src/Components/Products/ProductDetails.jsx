@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
 import userStore from "../../Store/userStore.js";
+import Breadcrumbs from "../Breadcrumbs.jsx";
 
 const ProductDetails = () => {
 
@@ -22,6 +23,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         (async () => {
+            window.scrollTo(0,0);
             await productByCategory(categoryID);
             await productDescription(productID);
         })()
@@ -29,11 +31,12 @@ const ProductDetails = () => {
 
     return (
         <div className="mt-28 flex flex-col items-center justify-center h-full">
+            <Breadcrumbs/>
             {productDescriptionDetails && productDescriptionDetails.map((item, i) => (
             <div className="w-2/3 h-auto shadow-lg shadow-cyan-400/30 rounded-md">
                 <div>
                     <div className="ml-10 pt-5">
-                            <div key={i}>  {/* Added key for optimal rendering */}
+                            <div key={i}>
                                 <p className="text-2xl font-semibold">{item['productName']}</p>
                                 <p className="text-gray-600">Posted on {new Intl.DateTimeFormat('en-US', {
                                     year: 'numeric',
