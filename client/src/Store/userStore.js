@@ -70,7 +70,7 @@ const userStore=create((set)=>({
         return result.data['status'];
     },
 
-    profileFormData: { name: null, contact: null,NewPass: null,area: null,img:null,division: null, district: null,OldPass:null},
+    profileFormData: { name: null, contact: null,NewPass: null,OldPass:null},
     profileFormDataChange: async (name, value) => {
         set((state) => ({
             profileFormData:{
@@ -80,14 +80,25 @@ const userStore=create((set)=>({
         }));
     },
 
+    profileDetailsForm: {area: null,img:"",division: null, district: null},
+    profileDetailsFormChange:async (name,value)=>{
+        set((state)=>({
+            profileDetailsForm:{
+                ...state.profileDetailsForm,
+                [name]:value
+            }
+        }))
+    },
     profileDetails:null,
+    profile:null,
 
     readProfile:async ()=>{
      try{
          const res=await axios.get('/api/v1/readProfile');
-         if(res.data['data'].length>0){
+         if(res.data.status==='success'){
              set({profileFormData:res.data['data'][0]})
              set({profileDetails:res.data['data']});
+             set({profile:res.data['data']});
          }
          else{
              set({profileDetails:[]});
@@ -103,7 +114,7 @@ const userStore=create((set)=>({
         try{
             const res=await axios.get('/api/v1/readProfileDetails');
             if(res.data['data'].length>0){
-                set({profileFormData:res.data['data'][0]})
+                set({profileDetailsForm:res.data['data'][0]})
                 set({profileDetails:res.data['data']});
             }
             else{
@@ -144,9 +155,11 @@ const userStore=create((set)=>({
     },
 
     readUserAdDetails:null,
+
     readUserAd:async (userID)=>{
        try {
            const res=await axios.get(`/api/v1/read-single-user-ad/${userID}`)
+           console.log("res: ",res)
            if(res.data.status==='success'){
                set({readUserAdDetails:res.data['data']});
            }

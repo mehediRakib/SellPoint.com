@@ -3,6 +3,7 @@ import Layout from "../Layout/Layout.jsx";
 import {Link, useParams} from "react-router-dom";
 import productStore from "../../Store/productStore.js";
 import Location from "./location.jsx";
+import DialogBoxLocation from "../dialogBox-location.jsx";
 
 const ProductShowBySubCategory = () => {
 
@@ -11,6 +12,16 @@ const ProductShowBySubCategory = () => {
      const url=new URLSearchParams(window.location.search);
      const subCategoryId=url.get("subcategoryId");
      const [keyWord,setKeyword]=useState("");
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
+
+    const openDialog = () => {
+        setIsDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setIsDialogOpen(false);
+    };
 
     useEffect(() => {
         (async () => {
@@ -129,6 +140,9 @@ const ProductShowBySubCategory = () => {
 
                 </div>
             </div>
+            {isDialogOpen && (
+                <DialogBoxLocation isClose={closeDialog}/>
+            )}
 
         </Layout>
     );

@@ -49,7 +49,7 @@ const AllProductDisplay = () => {
 
                                 {
                                     readAllProductDetails && readAllProductDetails.map((item,i)=>(
-                                        <Link to="">
+                                        <Link to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${item['categoryID']}`}>
 
                                             <div tabIndex="0" className="w-full h-52 bg-white rounded-lg focus:outline-none hover:shadow-md focus:ring-2 focus:ring-cyan-100 mt-6">
                                                 <div className="ml-10 pt-6 flex space-x-20">

@@ -32,6 +32,7 @@ import ContactUsPage from "./Pages/FooterSection-Page/Contact-us-page.jsx";
 import SafetyPage from "./Pages/FooterSection-Page/Safety-page.jsx";
 import TermsConditionPage from "./Pages/FooterSection-Page/Terms-condition-Page.jsx";
 import PrivacyPolicyPage from "./Pages/FooterSection-Page/Privacy-policy-page.jsx";
+import ProductByDistrictPage from "./Pages/Product-by-district-Page.jsx";
 
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
                 <Route path="/Products/:ClickedSubcategoryName/:categoryID" element={<ProductShowBySubCategory/>}/>
                 <Route path="/All-categories-products" element={<AllProductDisplayPage/>}/>
                 <Route path="/Product-by-division/:DivisionName/:divisionID" element={<ProductBySearchLocation/>}/>
+                <Route path="/district-name/:categoryID/:disrictID" element={<ProductByDistrictPage/>}/>
 
                 {/* Manage Footer section*/}
                 <Route path="/about-us" element={<AboutUsPage/>}/>

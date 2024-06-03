@@ -31,7 +31,6 @@ const ProductDetails = () => {
 
     return (
         <div className="mt-28 flex flex-col items-center justify-center h-full">
-            <Breadcrumbs/>
             {productDescriptionDetails && productDescriptionDetails.map((item, i) => (
             <div className="w-2/3 h-auto shadow-lg shadow-cyan-400/30 rounded-md">
                 <div>
@@ -52,7 +51,7 @@ const ProductDetails = () => {
                 </div>
                 <div className="flex">
                     <div className="w-4/6">
-                        <div className="w-48 h-48 ml-20 mt-10">
+                        <div className="w-64 h-64 ml-20 mt-10">
                             <img className="h-48 w-auto" src={item['productImg']} alt="productImg"/>
                         </div>
                         <div className="ml-10 mt-10">

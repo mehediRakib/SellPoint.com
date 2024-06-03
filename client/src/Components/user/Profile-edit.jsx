@@ -4,6 +4,7 @@ import toast, {Toaster} from "react-hot-toast";
 import userStore from "../../Store/userStore.js";
 import UserSubmitButton from "./UserSubmitButton.jsx";
 import UserSidebar from "../Products/UserSidebar.jsx";
+import productStore from "../../Store/productStore.js";
 
 const ProfileEdit = () => {
     const [image,setImage]=useState(null);
@@ -15,25 +16,34 @@ const ProfileEdit = () => {
         }
     }
 
-    let {profileFormData,readProfile,profileUpdate,readProfileDetails,profileFormDataChange,profileDetails}=userStore();
+    let {profileFormData,readProfile,profileUpdate,readProfileDetails,profileFormDataChange,profileDetailsForm,profileDetailsFormChange}=userStore();
+    const {readDivision,readDivisionDetails,readDistrictDetails,readDistrict,DivisionName,ReadDivisionByID}=productStore();
+    const [divisionId,setDivisionId]=useState();
+    const [district,setDistrict]=useState();
 
     useEffect(() => {
         (async () => {
             await readProfile();
-            await readProfileDetails()
+            await readProfileDetails();
+            await readDivision();
+            await  readDistrict(divisionId);
+            await ReadDivisionByID(divisionId)
 
         })()
-    }, []);
+    }, [divisionId]);
+
+
 
     const postBody={
         name:profileFormData.name,
         pass:profileFormData.NewPass,
         contact:profileFormData.contact,
-        area: profileFormData.area,
+        area: profileDetailsForm.area,
         img:image,
-        division:profileFormData.division,
-        district:profileFormData.district
+        division:DivisionName.division,
+        district:profileDetailsForm.district
     }
+    console.log(postBody);
 
     const updateProfile=async ()=>{
 
@@ -55,15 +65,15 @@ const ProfileEdit = () => {
                         <div className="flex justify-center w-3/4 mb-10">
                             <div className="mt-16 w-4/5">
                                 <div className="flex items-center space-x-4 mb-2 justify-center">
-                                    {
-                                        image?(
-                                            <img className='w-20 h-20 rounded-full' src={image} alt="img"/>
-                                        ):(
-                                            <img className='w-20 h-20 rounded-full' src="https://via.placeholder.com/150" alt="img"/>
-                                        )
-                                    }
+                                    {image ? (
+                                        <img className='w-20 h-20 rounded-full object-cover' src={image} alt="img" />
+                                    ) : profileDetailsForm.img ? (
+                                        <img className='w-20 h-20 rounded-full object-cover' src={profileDetailsForm.img} alt="img" />
+                                    ) : (
+                                        <img className='w-20 h-20 rounded-full' src="https://via.placeholder.com/150" alt="img" />
+                                    )}
 
-                                    <p>Name</p>
+                                    <p>{profileFormData.name}</p>
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <input
@@ -86,16 +96,32 @@ const ProfileEdit = () => {
                                             <input id="username" type="number" value={profileFormData.contact} onChange={(e)=>{profileFormDataChange('contact',e.target.value)}} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2" placeholder="Contact Number: "/>
                                         </div>
                                         <div className="mb-4">
-                                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Division</label>
-                                            <input id="username" type="text" value={profileFormData.division} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Division: "/>
+                                            <select className="mt-1 w-3/4 rounded-md border border-blue-500 p-2" onChange={(e)=>setDivisionId(e.target.value)}>
+                                                {
+                                                    profileDetailsForm.division?<option>{profileDetailsForm.division}</option>:<option>Select Division</option>
+                                                }
+                                                {
+                                                    readDivisionDetails && readDivisionDetails.map((item,i)=>(
+                                                        <option value={item['_id']}>{item['division']}</option>
+                                                    ))
+                                                }
+                                            </select>
                                         </div>
                                         <div className="mb-4">
-                                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">District</label>
-                                            <input id="username" type="text" value={profileFormData.district} onChange={(e)=>{profileFormDataChange('district',e.target.value)}}className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="District: "/>
+                                            <select className="mt-1 w-3/4 rounded-md border border-blue-500 p-2" onChange={(e)=>profileDetailsFormChange('district',e.target.value)}>
+                                                {
+                                                    profileDetailsForm.district?<option>{profileDetailsForm.district}</option>:<option>Select District</option>
+                                                }
+                                                {
+                                                    readDistrictDetails && readDistrictDetails.map((item,i)=>(
+                                                        <option value={item['district']}>{item['district']}</option>
+                                                    ))
+                                                }
+                                            </select>
                                         </div>
                                         <div className="mb-4">
                                             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Area</label>
-                                            <input id="username" type="text" value={profileFormData.area} onChange={(e)=>{profileFormDataChange('area',e.target.value)}} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Area: "/>
+                                            <input id="username" type="text" value={profileDetailsForm.area} onChange={(e)=>{profileDetailsFormChange('area',e.target.value)}} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Area: "/>
                                         </div>
                                             <br/>
                                         <p className="text-gray-500">Change Password</p>

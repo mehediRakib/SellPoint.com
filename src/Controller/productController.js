@@ -2,7 +2,8 @@ const {readCategoryService, readSubCategoryService, productByCategoryService, pr
     productSellService, ReadProductDetailsService, listByKeywordService, listByLocationService, productListByLowPrice,
     productListByHighPrice, sortProductByTimeService, filterProductByConditionService,readClickCategoryService,
     readLocationService, deleteUserAdService, readDivisionService, readDistrictService, readDivisionByIdService,
-    readAllProductService, readProductByLocationServie
+    readAllProductService, readProductByLocationServie, readDistrictByIdService, readProductByDistrictService,
+    ReadProductOnlyDistrictService, readProductByIdService, readProductDetailsByIdService, productLocationByIdService
 } = require("../Service/productService");
 
 exports.readCategory=async (req,res)=>{
@@ -96,6 +97,11 @@ exports.readDivisionById=async (req,res)=>{
     res.status(200).json(result);
 }
 
+exports.readDistrictById=async (req,res)=>{
+    const result=await readDistrictByIdService(req);
+    res.status(200).json(result);
+}
+
 
 exports.readAllProduct=async (req,res)=>{
     const result=await readAllProductService();
@@ -105,4 +111,24 @@ exports.readAllProduct=async (req,res)=>{
 exports.readProductByLocation=async (req,res)=>{
     const result=await readProductByLocationServie(req);
     res.status(200).json(result);
+}
+
+exports.readProductByDistrict=async (req,res)=>{
+    const result=await readProductByDistrictService(req);
+    res.status(200).json(result);
+}
+
+exports.readProductByID=async (req,res)=>{
+    const result=await readProductByIdService(req)
+    res.status(200).json(result)
+}
+
+exports.readProductDetailsByID=async (req,res)=>{
+    const result=await readProductDetailsByIdService(req)
+    res.status(200).json(result)
+}
+
+exports.productLocationById=async (req,res)=>{
+    const result=await productLocationByIdService(req)
+    res.status(200).json(result)
 }

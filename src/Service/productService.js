@@ -70,7 +70,7 @@ const productSellService=async (req)=>{
         const reqBody=req.body;
         const result=await productModel.create({productName:reqBody.productName,productImg:reqBody.img1,
             brandName:reqBody.brandName, userID:userID,price:reqBody.price,
-            categoryID:categoryID,subcategoryID:subcategoryID,divisionID:reqBody.divisionID});
+            categoryID:categoryID,subcategoryID:subcategoryID,divisionID:reqBody.divisionID,districtID:reqBody.districtID});
 
         const productId = result._id;
         const detailsBody={
@@ -389,6 +389,17 @@ const readDivisionByIdService=async (req)=>{
     }
 }
 
+
+const readDistrictByIdService=async (req)=>{
+    try{
+        const districtId=new ObjectID(req.params.districtID);
+        const data=await districtModel.find({_id:districtId})
+        return {status:'success',data:data};
+    }catch (e) {
+        return {status:'fail',data:e.toString()};
+    }
+}
+
 const readAllProductService=async ()=>{
     try{
         const joinWithSubcategoryModel={$lookup:{from:"subcategories",localField:"subcategoryID",foreignField:"_id",as:"subcategory"}};
@@ -429,6 +440,59 @@ const readProductByLocationServie=async (req)=>{
     return {status:'success',data:result};
 }
 
+
+const readProductByDistrictService = async (req) => {
+        const districtID = new ObjectID(req.params.districtID);
+        const categoryID = new ObjectID(req.params.categoryID);
+        let matchStage;
+        console.log("category",req.params.categoryID)
+    if (!categoryID || !ObjectID.isValid(categoryID) || categoryID==undefined) {
+        matchStage = { $match: { districtID: districtID } };
+       }else {
+           const categoryID = new ObjectID(req.params.categoryID);
+           console.log(categoryID)
+           matchStage = { $match: {categoryID:categoryID,districtID: districtID } };
+
+       }
+
+        const joinWithSubcategoryModel = { $lookup: { from: "subcategories", localField: "subcategoryID", foreignField: "_id", as: "subcategory" } };
+        const unWindSubcategory = { $unwind: { path: "$subcategory", preserveNullAndEmptyArrays: true } };
+        const joinWithProductLocation = { $lookup: { from: "productlocations", localField: "_id", foreignField: "productID", as: "location" } };
+        const unwindProductLocation = { $unwind: { path: "$location", preserveNullAndEmptyArrays: true } };
+        const projectionStage = { $project: { 'subcategory.subcategoryImg': 0, 'subcategory.categoryID': 0, 'location._id': 0, 'location.area': 0, 'location.productID': 0 } };
+
+        const data = await productModel.aggregate([
+            matchStage,
+            joinWithSubcategoryModel,
+            unWindSubcategory,
+            joinWithProductLocation,
+            unwindProductLocation,
+            projectionStage
+        ]);
+        return { status: 'success', data: data };
+};
+
+const readProductByIdService=async (req)=>{
+    const productId=new ObjectID(req.params.productID)
+    const result=await productModel.find({_id:productId});
+    return {status:'success',data:result}
+}
+
+const readProductDetailsByIdService=async (req)=>{
+    const productId=new ObjectID(req.params.productID)
+    const result=await productDetailsModel.find({productID:productId});
+    return {status:'success',data:result}
+}
+
+const productLocationByIdService=async (req)=>{
+    const productId=new ObjectID(req.params.productID)
+    const result=await productLocationModel.find({productID:productId});
+    return {status:'success',data:result}
+}
+
+
+
+
 module.exports={
     readCategoryService,
     readSubCategoryService,
@@ -449,5 +513,11 @@ module.exports={
     readDistrictService,
     readDivisionByIdService,
     readAllProductService,
-    readProductByLocationServie
+    readProductByLocationServie,
+    readDistrictByIdService,
+    readProductByDistrictService,
+    readProductByIdService,
+    readProductDetailsByIdService,
+    productLocationByIdService
+
 }

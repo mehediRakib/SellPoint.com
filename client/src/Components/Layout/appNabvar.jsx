@@ -85,7 +85,16 @@ const AppNabvar = () => {
                                         </div>
                                     </Link>
                                     <div>
-                                        <Link className="w-40 rounded-full px-4 py-1 bg-red-400 text-center text-green-900 focus:ring-1 focus:ring-blue-400 hover:bg-red-600 font-sans hover:text-gray-100" to="/login">Login</Link>
+                                        <Link className="text-white flex space-x-1" to="/login">
+                                            <div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p>Login</p>
+                                            </div>
+                                        </Link>
                                     </div>
                                     <div>
                                         <Link className="w-40 rounded-full px-4 py-1 hover:bg-purple-300 text-center text-green-900 focus:ring-1 focus:ring-red-400 bg-purple-100 font-sans " to="/login">Post Your Ad</Link>

@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import userStore from "../../Store/userStore.js";
 
 const UserSidebar = () => {
-    const { profileDetails, readProfile } = userStore();
+    const { readProfile,profile } = userStore();
 
     useEffect(() => {
         (async () => {
             await readProfile();
-            console.log(profileDetails);
         })();
     }, []);
 
@@ -18,7 +17,7 @@ const UserSidebar = () => {
                 <div className="text-center mb-5 sm:mb-10">
                     <p className="font-semibold text-xl">Account</p>
                 </div>
-                {profileDetails && profileDetails.map((item, i) => (
+                {profile && profile.map((item, i) => (
                     <div key={i}>
                         <Link to={`/my-account/${item['_id']}`}>
                             <div className="py-2 hover:bg-gray-700 rounded-md">

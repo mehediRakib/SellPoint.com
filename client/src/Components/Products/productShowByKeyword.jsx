@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import productStore from "../../Store/productStore.js";
 import {Link, useParams} from "react-router-dom";
+import SideBarWithAllCategory from "./SideBar-with-allCategory.jsx";
 
 const ProductShowByKeyword = () => {
     const {productByKeywordDetails,productByKeyWord,readCategory,categoryDetails,readDivision,readDivisionDetails}=productStore();
@@ -12,7 +13,7 @@ const ProductShowByKeyword = () => {
             await readCategory();
             await readDivision();
         })()
-    }, []);
+    }, [Keyword]);
     return (
         <div className="mt-28">
             <div className="flex justify-center items-center">
@@ -53,27 +54,24 @@ const ProductShowByKeyword = () => {
                             </div>
                             <div className=" ml-5 pt-20">
                                 <p className="font-bold">Category</p>
-                                <ul className="space-y-2 ml-8 text-sky-700 mt-3">
-                                    {
-                                        categoryDetails && categoryDetails.map((item,i)=>(
-                                            <li>{item['categoryName']}</li>
-                                        ))
-                                    }
-                                </ul>
+                                    <SideBarWithAllCategory/>
+
                             </div>
                             <div className=" ml-5 pt-20">
                                 <p className="font-bold">Location: </p>
-                                <ul className="space-y-2 ml-8 text-sky-700 mt-3">
+                                <div className="space-y-2 ml-12 text-sky-700 mt-3 mb-5">
                                     {readDivisionDetails && readDivisionDetails.map((item,i)=>(
-                                        <li>{item['division']}</li>
+                                       <div>
+                                           <Link to={`/Product-by-division/${item['division']}/${item['_id']}`}>{item['division']}</Link>
+                                       </div>
                                     ))}
-                                </ul>
+                                </div>
                             </div>
                         </div>
                         <div className="w-2/3 space-y-2 p-4">
                             {
                                 productByKeywordDetails && productByKeywordDetails.map((item, i) => (
-                                    <Link to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${item['categoryID']}`} key={i}>
+                                    <Link to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${item['categoryID']}`}>
                                       <div className="space-y-2 hover:shadow-md bg-white rounded-md p-2">
                                         <div className="flex pb-2">
                                                 <div className="w-1/3">

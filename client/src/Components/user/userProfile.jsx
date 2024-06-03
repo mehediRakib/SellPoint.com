@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import userStore from "../../Store/userStore.js";
 import toast from "react-hot-toast";
@@ -7,13 +7,16 @@ import Swal from "sweetalert2";
 import UserSidebar from "../Products/UserSidebar.jsx";
 
 const UserProfile = () => {
-    const navigate=useNavigate();
-    const {profileDetails,readProfile,doLogout,accountDelete}=userStore();
+    const navigate = useNavigate();
+    const {profileDetails, readProfile, doLogout, accountDelete,readProfileDetails} = userStore();
     useEffect(() => {
         (async () => {
             await readProfile();
+            await readProfileDetails();
         })()
     }, []);
+
+    const [img, setImg] = useState("")
 
     const logout = async () => {
         const res = await doLogout();
@@ -44,16 +47,15 @@ const UserProfile = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const res = await accountDelete();
-                if(res==='success'){
+                if (res === 'success') {
                     await swalWithBootstrapButtons.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
                         icon: "success"
                     });
                     navigate('/');
-                }
-                else{
-                    throw  new Error("Something went wrong!")
+                } else {
+                    throw new Error("Something went wrong!")
 
                 }
 
@@ -72,19 +74,25 @@ const UserProfile = () => {
     return (
         <div className="mt-32 flex justify-center items-center px-4 lg:px-0">
             <div className="bg-slate-50 w-full lg:w-2/3 rounded-md shadow-lg flex flex-col lg:flex-row overflow-hidden">
-                <UserSidebar />
+                <UserSidebar/>
                 {/* Main Content */}
                 <div className="bg-white flex-auto p-4 lg:p-8">
+
                     <div className="flex items-center space-x-4 mb-6">
-                        <img className="w-20 h-20 rounded-full" src="https://via.placeholder.com/150" alt="Profile" />
-                        <div>
-                            {profileDetails && profileDetails.map((item, i) => (
-                                <React.Fragment key={i}>
+                        {profileDetails && profileDetails.map((item, i) => (
+                            <>
+                                {
+                                    item['img'] ?
+                                        <img className="w-20 h-20 rounded-full" src={item['img']} alt="Profile"/> :
+                                        <img className="w-20 h-20 rounded-full" src="https://via.placeholder.com/150"
+                                             alt="Profile"/>
+                                }
+                                <div>
                                     <p className="font-semibold text-lg text-gray-900">{item['name']}</p>
                                     <p className="text-gray-600">{item['email']}</p>
-                                </React.Fragment>
-                            ))}
-                        </div>
+                                </div>
+                            </>
+                        ))}
                     </div>
                     <div className="space-x-3">
                         <UserSubmitButton

@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import axios from "axios";
 import {unauthorized} from "../Utility/utility.js";
+import productDetails from "../Components/Products/ProductDetails.jsx";
 
 
 const productStore=create((set)=>({
@@ -78,38 +79,48 @@ const productStore=create((set)=>({
         }
     },
 
-     editProductForm:{productName:"",brandName:"",price:"",ProductDetails:{model:"",condition:"",authenticity:"",color:"",features:"",shortDes:""},ProductLocation:{division:"",district:"",area:""}},
+     productForm:{productName:"",brandName:"",price:""},
+     productDetailsForm:{img1:"",model:"",condition:"",authenticity:"",color:"",features:"",shortDes:""},
+     productLocationForm:{division:"",district:"",area:""},
 
-    editProductFormOnChange: async (name, value) => {
-        set((prevState) => ({
-            ...prevState,
-            editProductForm: {
-                ...prevState.editProductForm,
-                ProductDetails: {
-                    ...prevState.editProductForm.ProductDetails,
-                    [name]: value
-                }
+     onChange:(formName,name,value)=>{
+        set((state)=>({
+            [formName]:{
+                ...state[formName],
+                [name]:value
             }
-        }));
-    }
+        }))
+     },
 
-,
-    productDescriptionDetails:null,
-    productDescription:async (productID)=>{
-        try{
-            console.log("befor data fetch")
-            const res=await axios.get(`/api/v1/readProductDetails/${productID}`);
-            console.log("res: ",res)
-            if(res.data.status==='success'){
-                set({productDescriptionDetails:res.data['data']});
-                set({editProductForm:res.data['data'][0]});
-            }else{
-                set({productDescriptionDetails:[]});
-            }
-        }catch (e) {
-            unauthorized(e.response.status)
+    readProductById:async (productId)=>{
+        const res=await axios.get(`/api/v1/product-by-Id/${productId}`);
+        if(res.data.status==='success'){
+            set({productForm:res.data['data'][0]})
+        }else {
+            set({productForm:[]});
         }
     },
+
+    readProductDetailsById:async (productId)=>{
+        const res=await axios.get(`/api/v1/product-details-by-Id/${productId}`);
+        if(res.data.status==='success'){
+            set({productDetailsForm:res.data['data'][0]})
+        }else {
+            set({productDetailsForm:[]});
+        }
+    },
+
+    readLocationById:async (productId)=>{
+        const res=await axios.get(`/api/v1/product-location-by-Id/${productId}`);
+        if(res.data.status==='success'){
+            set({productLocationForm:res.data['data'][0]})
+        }else {
+            set({productLocationForm:[]});
+        }
+    },
+
+
+
 
     productSellForm:{productName:"",brandName:"",price:"",condition:"",color:"",model:"",authenticity:"",features:"",shortDes:"",division:"",district:"",area:""},
     productSellFormOnchange:async (name,value)=>{
@@ -193,6 +204,17 @@ const productStore=create((set)=>({
         }else {
             set({DivisionName:[]});
         }
+    },
+
+
+    DistrictName:{division:""},
+    ReadDistrictByID:async (districtID)=>{
+        const res=await axios.get(`/api/v1/district-by-ID/${districtID}`);
+        if(res.data.status==='success'){
+            set({DistrictName:res.data['data'][0]})
+        }else {
+            set({DistrictName:[]});
+        }
     }
     ,
     productBySubcategoryDetails:null,
@@ -225,6 +247,21 @@ const productStore=create((set)=>({
         }
         else {
             set({readProductByLocationDetails:[]});
+        }
+    },
+
+    readProductByDistrictDetails:null,
+    readProductByDistrict:async (categoryId,districtId)=>{
+
+            let url=`/api/v1/product-by-district/${categoryId}/${districtId}`;
+        console.log("url: ",url);
+
+        const res=await axios.get(url);
+        if(res.data.status==='success'){
+            set({readProductByDistrictDetails:res.data['data']})
+        }
+        else {
+            set({readProductByDistrictDetails:[]});
         }
     }
 

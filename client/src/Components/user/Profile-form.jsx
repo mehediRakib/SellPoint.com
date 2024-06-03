@@ -5,7 +5,7 @@ import UserSidebar from "../Products/UserSidebar.jsx";
 
 
 const ProfileForm = () => {
-    let {profileFormData,readProfile,readProfileDetails}=userStore();
+    let {profileFormData,readProfile,readProfileDetails,profileDetailsForm}=userStore();
     useEffect(() => {
         (async () => {
             await readProfileDetails();
@@ -13,6 +13,8 @@ const ProfileForm = () => {
 
         })()
     }, []);
+    console.log(profileFormData.img);
+    console.log(profileFormData)
 
 
 
@@ -26,8 +28,10 @@ const ProfileForm = () => {
                         <div className="flex justify-center w-3/4">
                             <div className="mt-16 w-4/5">
                                 <div className="flex items-center space-x-4 mb-2 justify-center">
-                                    <img className='w-20 h-20 rounded-full' src="https://via.placeholder.com/150" alt="img"/>
-                                    <p>Name</p>
+                                    {
+                                        profileDetailsForm.img?  <img className='w-20 h-20 rounded-full object-cover' src={profileDetailsForm.img} alt="img"/>: <img className='w-20 h-20 rounded-full' src="https://via.placeholder.com/150" alt="img"/>
+                                    }
+                                    <p>{profileFormData.name}</p>
                                 </div>
                                 <div className="flex justify-center w-full">
                                     <div className='w-full px-4 ml-20'>
@@ -41,15 +45,15 @@ const ProfileForm = () => {
                                         </div>
                                         <div className="mb-4">
                                             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Division</label>
-                                            <input id="username" type="text" value={profileFormData.division} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Division: "/>
+                                            <input id="username" type="text" value={profileDetailsForm.division} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Division: "/>
                                         </div>
                                         <div className="mb-4">
                                             <label htmlFor="username" className="block text-sm font-medium text-gray-700">District</label>
-                                            <input id="username" type="text" value={profileFormData.district} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="District: "/>
+                                            <input id="username" type="text" value={profileDetailsForm.district} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="District: "/>
                                         </div>
                                         <div className="mb-4">
                                             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Area</label>
-                                            <input id="username" type="text" value={profileFormData.area} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Area: "/>
+                                            <input id="username" type="text" value={profileDetailsForm.area} className="mt-1 w-3/4 rounded-md border border-blue-500 p-2"placeholder="Area: "/>
                                         </div>
 
                                     </div>

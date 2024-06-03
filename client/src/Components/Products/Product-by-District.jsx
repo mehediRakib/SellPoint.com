@@ -1,34 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import productStore from "../../Store/productStore.js";
 import {Link, useParams} from "react-router-dom";
 import Location from "./location.jsx";
 import Slider from "./slider.jsx";
 import DialogBoxLocation from "../dialogBox-location.jsx";
+import productStore from "../../Store/productStore.js";
 
-const Product = () => {
-    const {
-        readClickCategory,
-        readSubCategoryDetails,
-        readSubCategory,
-        ClickCategoryDetails,
-        readLocationDetails,
-        readLocation,
-        productByCategoryDetails,
-        productByCategory
-    } = productStore();
-    const {categoryID} = useParams();
-
-    useEffect(() => {
-        (async () => {
-            await readClickCategory(categoryID);
-            await readSubCategory(categoryID);
-            await readLocation();
-            await productByCategory(categoryID)
-        })()
-    }, []);
-
-    const [keyWord, setKeyword] = useState("");
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+const ProductByDistrict = () => {
+    const {categoryID}=useParams();
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
 
     const openDialog = () => {
         setIsDialogOpen(true);
@@ -37,7 +16,19 @@ const Product = () => {
     const closeDialog = () => {
         setIsDialogOpen(false);
     };
+    const {
+        readClickCategory, readSubCategoryDetails, readSubCategory, ClickCategoryDetails, readLocationDetails, readLocation,
+         readProductByDistrictDetails} = productStore();
 
+    const [keyWord, setKeyword] = useState("");
+
+    useEffect(() => {
+        (async () => {
+            await readClickCategory(categoryID);
+            await readSubCategory(categoryID);
+            await readLocation();
+        })()
+    }, []);
     return (
         <div className=" mt-10 sm:mt-28 bg-gray-100">
             <div className="flex justify-center">
@@ -121,7 +112,7 @@ const Product = () => {
                             </div>
 
                             <div className="ml-4">
-                                {productByCategoryDetails && productByCategoryDetails.map((item, i) => (
+                                {readProductByDistrictDetails && readProductByDistrictDetails.map((item, i) => (
                                     <Link
                                         to={`/productDetails/${item['productName']}/${item['_id']}?categoryID=${categoryID}`}
                                         key={i}>
@@ -130,7 +121,7 @@ const Product = () => {
                                              className="w-full h-52 bg-white rounded-lg focus:outline-none hover:shadow-md focus:ring-2 focus:ring-cyan-100 mt-6">
                                             <div className="ml-10 pt-6 flex space-x-20">
                                                 <div className="flex flex-grow ml-16 w-1/4">
-                                                    <img className="h-32 max-w-32" src={item['productImg']} alt="Product image"/>
+                                                    <img className="h-32" src={item['productImg']} alt="Product image"/>
                                                 </div>
                                                 <div className="pl-10 flex flex-grow w-2/3">
                                                     <div>
@@ -162,7 +153,6 @@ const Product = () => {
             )}
         </div>
     );
-
 };
 
-export default Product;
+export default ProductByDistrict;

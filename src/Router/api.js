@@ -37,9 +37,16 @@ router.get('/sortByCondition/:subcategoryID/:condition',productController.sortBy
 router.get('/clickCategory/:categoryID',productController.readClickCategory);
 router.get('/readLocation',productController.readLocation);
 router.get('/division-by-ID/:divisonID',productController.readDivisionById);
+router.get('/district-by-ID/:districtID',productController.readDistrictById);
 router.get('/delete-user-ad/:productID',AuthVerification,productController.deleteUserAd);
 router.get('/allProduct',productController.readAllProduct);
 router.get('/productByLocation/:divisionID',productController.readProductByLocation);
+router.get('/product-by-district/:categoryID/:districtID',productController.readProductByDistrict);
+router.get('/product-by-Id/:productID',productController.readProductByID);
+router.get('/product-details-by-Id/:productID',productController.readProductDetailsByID);
+router.get('/product-location-by-Id/:productID',productController.productLocationById);
+
+
 
 
 //Admin api endPoint
@@ -59,6 +66,7 @@ router.get('/admin/delete-subcategory/:subcategoryID',AuthVerification,isAdmin,a
 router.get('/admin/subcategory-by-Id/:subcategoryID',AuthVerification,isAdmin,adminController.SubcategoryById);
 router.post('/admin/update-Sub-category/:subcategoryID',AuthVerification,isAdmin,adminController.updateSubcategoryByID);
 router.get('/admin/countAd',AuthVerification,isAdmin,adminController.totalAd);
+
 
 //location
 

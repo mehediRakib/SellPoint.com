@@ -65,6 +65,9 @@ const UserAd = () => {
         });
 
     }
+    if (!readUserAdDetails || readUserAdDetails.length === 0) {
+        return <h2 className="mt-48 h-64 text-center text-3xl font-semibold">Loading....</h2>;
+    }
     return (
         <div className="mt-28">
             <div className="flex justify-center items-center">
