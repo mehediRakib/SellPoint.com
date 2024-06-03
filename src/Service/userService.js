@@ -1,6 +1,8 @@
 
 const userModel=require('../Model/user/userModel');
 const profileModel=require('../Model/user/profileModel');
+const productDetailsModel=require('../Model/products/ProductDetailsModel');
+const productLocationModel=require('../Model/products/ProductLocationModel');
 
 const bcrypt=require('bcrypt');
 const EmailSend = require("../utility/EmailHelper");
@@ -172,6 +174,37 @@ const readSingleUserAdService=async (req)=>{
 
 }
 
+const updateUserProductDetailService=async (req)=>{
+    try{
+        const productID=new ObjectID(req.params.productID);
+        const postBody=req.body;
+        const productBody={
+            productName:postBody.productName,
+            productImg:postBody.img1,
+            price:postBody.price,
+            brandName:postBody.brandName
+        }
+        const DetailsBody={
+            img1:postBody.img1,
+            img2:postBody.img2,
+            price:postBody.price,
+            color:postBody.color,
+            condition:postBody.condition,
+            model:postBody.model,
+            authenticity:postBody.authenticity,
+            features:postBody.features,
+            shortDes:postBody.shortDes
+        }
+                 const data=await productModel.updateOne({_id:productID},productBody);
+                 await productDetailsModel.updateOne({productID:productID},DetailsBody);
+                 await productLocationModel.updateOne({productID:productID},{division:postBody.division,district:postBody.district,area:postBody.district});
+        return {status: "success", data: data}
+
+    }catch (e) {
+
+    }
+}
+
 
 
 module.exports={
@@ -183,6 +216,7 @@ module.exports={
     readUserProfile,
     readUserDetailsProfile,
     userIdentificationService,
-    readSingleUserAdService
+    readSingleUserAdService,
+    updateUserProductDetailService
 
 }

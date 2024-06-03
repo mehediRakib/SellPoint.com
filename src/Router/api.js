@@ -45,6 +45,7 @@ router.get('/product-by-district/:categoryID/:districtID',productController.read
 router.get('/product-by-Id/:productID',productController.readProductByID);
 router.get('/product-details-by-Id/:productID',productController.readProductDetailsByID);
 router.get('/product-location-by-Id/:productID',productController.productLocationById);
+router.post('/update-product-details/:productID',userController.updateUserProductDetails);
 
 
 

@@ -1,18 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import productStore from "../../Store/productStore.js";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import userStore from "../../Store/userStore.js";
+import toast, {Toaster} from "react-hot-toast";
 
 const EditProductDetails = () => {
 
     const {
         readDivisionDetails, readDivision,readProductById,productForm,onChange,productDetailsForm,readProductDetailsById,readLocationById,productLocationForm,
         readDistrictDetails,readDistrict,DivisionName,ReadDivisionByID} = productStore();
+    const {updateUserProductDetails}=userStore();
     const {productID} = useParams();
 
     const [divisionId,setDivisionId]=useState();
 
     useEffect(() => {
         (async () => {
+            window.scrollTo(0,0);
             await readDivision();
             await readProductById(productID);
             await readProductDetailsById(productID);
@@ -66,9 +70,25 @@ const EditProductDetails = () => {
         shortDes:productDetailsForm.shortDes,
         district:productLocationForm.district,
         division:DivisionName.division,
-        img1:img1,
-        img2:img2
+        img1:img1?img1:productDetailsForm.img1,
+        img2:img2?img2:productDetailsForm.img2
 
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const userID = urlParams.get('userID')
+
+    const navigate=useNavigate();
+
+    const updateProductDetails=async () => {
+       const data = await updateUserProductDetails(productID,postBody);
+        if(data==='success'){
+            toast.success("Profile Details successfully updated.");
+            navigate(`/my-ads/${userID}`)
+        }
+        else {
+            toast.error("Something went wrong!");
+        }
     }
 
 
@@ -225,7 +245,7 @@ const EditProductDetails = () => {
                                         }
                                         {
                                             readDistrictDetails && readDistrictDetails.map((item,i)=>(
-                                                <option value={item.district}>{item['district']}</option>
+                                                <option key={i} value={item.district}>{item['district']}</option>
                                             ))
                                         }
                                     </select>
@@ -255,7 +275,7 @@ const EditProductDetails = () => {
                                 </div>
                                 <div className='px-2 w-full md:w-1/2 pt-6 flex space-x-6'>
                                     <div className="relative w-48 h-48 border border-cyan-200">
-                                        <div className="absolute -top-6 left-2 flex items-center space-x-12 ">
+                                        <div className="absolute -top-6 left-2 flex items-center space-x-16">
                                             <label className="text-sm font-medium">Image1</label>
                                            <button className="w-7 h-6 hover:bg-red-500 rounded-md" onClick={()=>setImg1("")}>
                                                <svg
@@ -281,15 +301,15 @@ const EditProductDetails = () => {
                                             onChange={convert64Img1}
                                         />
 
-                                            <div className="mt-3">
-                                                <label htmlFor="img1" className="cursor-pointer w-20 h-5 rounded-full px-2 py-1 pl-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-cyan-200 hover:text-white hover:font-semibold">Change</label>
+                                            <div className="mt-3 flex justify-center items-center">
+                                                <label htmlFor="img1" className="cursor-pointer w-20  rounded-full px-2  pl-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-cyan-200 hover:text-white hover:font-semibold hover:ring-1 hover:ring-cyan-500 ">Change</label>
                                             </div>
                                     </div>
 
                                     <div className="relative w-48 h-48 border border-cyan-200">
-                                        <div className="absolute -top-6 left-2 flex items-center space-x-12 ">
+                                        <div className="absolute -top-6 left-2 flex items-center space-x-16">
                                             <label className="text-sm font-medium">Image2</label>
-                                            <button className="w-7 h-6 hover:bg-red-500 rounded-md" >
+                                            <button className="w-7 h-6 hover:bg-red-500 rounded-md" onClick={()=>setImg2("")} >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
@@ -313,8 +333,8 @@ const EditProductDetails = () => {
                                             onChange={convert64Img2}
                                         />
 
-                                        <div className="mt-3">
-                                            <label htmlFor="img2" className="cursor-pointer w-20 h-5 rounded-full px-2 py-1 pl-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-cyan-200 hover:text-white hover:font-semibold">Change</label>
+                                        <div className="mt-3 flex justify-center items-center">
+                                            <label htmlFor="img2" className="cursor-pointer w-20 rounded-full px-2  pl-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-cyan-200 hover:text-white hover:font-semibold hover:ring-1 hover:ring-orange-500">Change</label>
                                         </div>
                                     </div>
 
@@ -328,13 +348,16 @@ const EditProductDetails = () => {
                     </div>
                     <div className="mb-10 flex items-center justify-center">
                         <button
-                            className="bg-green-600 rounded-full px-5 py-1 text-white font-semibold focus:ring-2 focus: ring-orange-300 focus:outline-none hover:bg-red-600 hover:focus:outline-none hover:focus:ring-2 hover:focus:ring-green-500">Save
+                            className="bg-green-600 rounded-full px-8 py-1 text-white font-semibold focus:ring-2 focus: ring-orange-300 focus:outline-none hover:bg-red-600 hover:focus:outline-none hover:focus:ring-2 hover:focus:ring-green-500 ring-2 "
+                            onClick={updateProductDetails}>
+                            Save
                         </button>
                     </div>
                 </div>
 
 
             </div>
+            <Toaster position="top-center"/>
         </div>
     );
 };

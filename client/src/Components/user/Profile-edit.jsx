@@ -16,7 +16,8 @@ const ProfileEdit = () => {
         }
     }
 
-    let {profileFormData,readProfile,profileUpdate,readProfileDetails,profileFormDataChange,profileDetailsForm,profileDetailsFormChange}=userStore();
+    let {profileFormData,readProfile,profileUpdate,readProfileDetails,profileFormDataChange,profileDetailsForm,
+        profileDetailsFormChange}=userStore();
     const {readDivision,readDivisionDetails,readDistrictDetails,readDistrict,DivisionName,ReadDivisionByID}=productStore();
     const [divisionId,setDivisionId]=useState();
     const [district,setDistrict]=useState();

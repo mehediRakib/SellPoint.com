@@ -20,17 +20,17 @@ const UserSidebar = () => {
                 {profile && profile.map((item, i) => (
                     <div key={i}>
                         <Link to={`/my-account/${item['_id']}`}>
-                            <div className="py-2 hover:bg-gray-700 rounded-md">
+                            <div className="py-2 hover:bg-gray-700 rounded-md px-4">
                                 <p className="my-2">My Account</p>
                             </div>
                         </Link>
                         <Link to={`/my-ads/${item['_id']}`}>
-                            <div className="py-2 hover:bg-gray-700 rounded-md">
+                            <div className="py-2 hover:bg-gray-700 rounded-md px-4">
                                 <p className="my-2">My Ad</p>
                             </div>
                         </Link>
                         <Link to="/contact-numbers">
-                            <div className="py-2 hover:bg-gray-700 rounded-md">
+                            <div className="py-2 hover:bg-gray-700 rounded-md px-4">
                                 <p className="my-2">Contact Numbers</p>
                             </div>
                         </Link>

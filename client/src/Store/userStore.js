@@ -159,7 +159,6 @@ const userStore=create((set)=>({
     readUserAd:async (userID)=>{
        try {
            const res=await axios.get(`/api/v1/read-single-user-ad/${userID}`)
-           console.log("res: ",res)
            if(res.data.status==='success'){
                set({readUserAdDetails:res.data['data']});
            }
@@ -170,6 +169,11 @@ const userStore=create((set)=>({
            unauthorized(e.response.status)
 
        }
+    },
+
+    updateUserProductDetails:async (productID,postBody)=>{
+        const res=await axios.post(`/api/v1/update-product-details/${productID}`,postBody);
+       return res.data.status;
     }
 
 
